@@ -1,0 +1,184 @@
+{
+  "candidates": [
+    {
+      "id": "CAND1",
+      "job_id": "JOB1",
+      "name": "Streamlit",
+      "email": "monalprashanth98@gmail.com",
+      "phone": "956374869043",
+      "skills": [
+        "python",
+        "java",
+        "javascript",
+        "react",
+        "sql",
+        "machine learning",
+        "tensorflow",
+        "mongodb"
+      ],
+      "experience_years": 0,
+      "match_score": 0.0,
+      "missing_skills": [
+        "ci/cd",
+        "git",
+        "accessibility",
+        "css3",
+        "agile",
+        "fastapi",
+        "flask",
+        "html5",
+        "pandas",
+        "django"
+      ],
+      "priority": "Low",
+      "recommended_action": "Reject",
+      "status": "Applied",
+      "applied_at": "2025-12-21T14:54:05.611300",
+      "resume_path": "data/resumes\\1766309045.10828_Monal(final).pdf",
+      "assessment": {
+        "job_id": "JOB1",
+        "type": "coding",
+        "platform": "HackerRank",
+        "assigned_at": "2025-12-21T15:57:04.358864",
+        "status": "pending",
+        "assessment_id": "HR1766312824.358847"
+      },
+      "interview": {
+        "job_id": "JOB1",
+        "status": "scheduled",
+        "scheduled_at": "2025-12-21T15:58:59.867901",
+        "interview_time": "2025-12-22T10:00:00",
+        "interview_panel": [
+          {
+            "id": "INT003",
+            "name": "Amit Patel",
+            "expertise": [
+              "Data Science",
+              "Machine Learning",
+              "Python"
+            ],
+            "match_score": 18.0,
+            "role": "Technical Round",
+            "availability": [
+              "Monday",
+              "Wednesday",
+              "Friday"
+            ]
+          },
+          {
+            "id": "INT001",
+            "name": "Rajesh Kumar",
+            "expertise": [
+              "Python",
+              "Backend",
+              "System Design"
+            ],
+            "match_score": 16.0,
+            "role": "System Design Round",
+            "availability": [
+              "Monday",
+              "Tuesday",
+              "Wednesday"
+            ]
+          },
+          {
+            "id": "INT005",
+            "name": "Vikram Singh",
+            "expertise": [
+              "DevOps",
+              "Cloud",
+              "AWS",
+              "System Design"
+            ],
+            "match_score": 14.0,
+            "role": "System Design Round",
+            "availability": [
+              "Tuesday",
+              "Thursday",
+              "Friday"
+            ]
+          }
+        ],
+        "event_id": "EVENT1766312939.86789",
+        "zoom_link": "https://zoom.us/j/xyz123"
+      },
+      "offer": {
+        "job_id": "JOB1",
+        "status": "pending_signature",
+        "salary": 19,
+        "joining_date": "2026-01-20",
+        "created_at": "2025-12-21T15:59:13.385616",
+        "envelope_id": "ENV1766312953.385669",
+        "signing_link": "https://na3.docusign.net/signing?token=xyz123"
+      },
+      "onboarding": {
+        "status": "in_progress",
+        "started_at": "2025-12-21T15:59:20.994322",
+        "employee_id": "EMP1766312960.994283",
+        "it_ticket": "INC0002960",
+        "tasks": [
+          {
+            "task": "IT Provisioning",
+            "status": "in_progress",
+            "owner": "IT Team"
+          },
+          {
+            "task": "Benefits Enrollment",
+            "status": "pending",
+            "owner": "HR"
+          },
+          {
+            "task": "Manager Intro",
+            "status": "pending",
+            "owner": "Manager"
+          },
+          {
+            "task": "Team Onboarding",
+            "status": "pending",
+            "owner": "Buddy"
+          }
+        ],
+        "engagement_score": 95,
+        "engagement_last_checked": "2025-12-21T15:59:20.994338"
+      }
+    },
+    {
+      "id": "CAND2",
+      "job_id": "JOB3",
+      "name": "Streamlit",
+      "email": "monalprashanth98@gmail.com",
+      "phone": "956374869043",
+      "skills": [
+        "python",
+        "java",
+        "javascript",
+        "react",
+        "sql",
+        "machine learning",
+        "tensorflow",
+        "mongodb"
+      ],
+      "experience_years": 0,
+      "match_score": 0.0,
+      "missing_skills": [
+        "agile",
+        "docker",
+        "git",
+        "ci/cd"
+      ],
+      "priority": "Low",
+      "recommended_action": "Reject",
+      "status": "Applied",
+      "applied_at": "2025-12-21T15:39:39.960190",
+      "resume_path": "data/resumes\\1766311779.190727_Monal(final).pdf",
+      "assessment": {
+        "job_id": "JOB1",
+        "type": "coding",
+        "platform": "HackerRank",
+        "assigned_at": "2025-12-21T15:58:10.534746",
+        "status": "pending",
+        "assessment_id": "HR1766312890.534723"
+      }
+    }
+  ]
+}
