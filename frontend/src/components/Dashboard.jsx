@@ -10,8 +10,8 @@ const Dashboard = ({ onNavigate }) => {
     medium_priority: 0,
     recent_applications: []
   });
-  const [platformAnalytics, setPlatformAnalytics] = useState(null);
-  const [selectedJob, setSelectedJob] = useState(null);
+  const [jobs, setJobs] = useState([]);
+  const [candidates, setCandidates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -29,14 +29,12 @@ const Dashboard = ({ onNavigate }) => {
       setStats(response.data);
       setError(null);
       
-      // Fetch platform analytics for the first job if available
-      if (response.data.total_jobs > 0) {
-        const jobsList = await axios.get('http://localhost:5000/api/jobs');
-        if (jobsList.data.length > 0) {
-          fetchPlatformAnalytics(jobsList.data[0].id);
-          setSelectedJob(jobsList.data[0]);
-        }
-      }
+      // Fetch jobs and candidates for detail views
+      const jobsRes = await axios.get('http://localhost:5000/api/jobs');
+      setJobs(jobsRes.data || []);
+      
+      const candidatesRes = await axios.get('http://localhost:5000/api/candidates');
+      setCandidates(candidatesRes.data || []);
     } catch (error) {
       console.error('Error fetching stats:', error);
       setStats({
@@ -50,15 +48,6 @@ const Dashboard = ({ onNavigate }) => {
     } finally {
       setLoading(false);
       setRefreshing(false);
-    }
-  };
-
-  const fetchPlatformAnalytics = async (jobId) => {
-    try {
-      const response = await axios.get(`http://localhost:5000/api/jobs/${jobId}/analytics`);
-      setPlatformAnalytics(response.data);
-    } catch (error) {
-      console.error('Error fetching platform analytics:', error);
     }
   };
 
@@ -91,10 +80,10 @@ const Dashboard = ({ onNavigate }) => {
       <div className="dashboard-header">
         <h2 className="dashboard-title">Recruitment Dashboard</h2>
         <button 
-          onClick={() => fetchStats()}
+          onClick={() => window.location.reload()}
           className={`dashboard-refresh-btn ${refreshing ? 'spinning' : ''}`}
           disabled={refreshing}
-          title="Click to refresh dashboard data"
+          title="Click to reload the page"
         >
           {refreshing ? '⟳ Refreshing...' : '⟳ Refresh'}
         </button>
@@ -180,92 +169,220 @@ const Dashboard = ({ onNavigate }) => {
         </div>
       </div>
 
-      <div className="applications-card">
-        <h3 className="applications-title">Platform Analytics</h3>
-        {platformAnalytics ? (
-          <div>
-            <div style={{ marginBottom: '24px' }}>
-              <h4 style={{ color: '#1f2937', marginBottom: '12px', fontSize: '14px', fontWeight: '600' }}>
-                📊 {platformAnalytics.job_title || 'Job'} Performance Summary
-              </h4>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '12px' }}>
-                <div style={{ backgroundColor: '#f3f4f6', padding: '12px', borderRadius: '8px', textAlign: 'center' }}>
-                  <div style={{ color: '#6b7280', fontSize: '12px', marginBottom: '4px' }}>Total Views</div>
-                  <div style={{ color: '#1f2937', fontSize: '24px', fontWeight: 'bold' }}>{platformAnalytics.summary.total_views}</div>
-                </div>
-                <div style={{ backgroundColor: '#f3f4f6', padding: '12px', borderRadius: '8px', textAlign: 'center' }}>
-                  <div style={{ color: '#6b7280', fontSize: '12px', marginBottom: '4px' }}>Applications</div>
-                  <div style={{ color: '#1f2937', fontSize: '24px', fontWeight: 'bold' }}>{platformAnalytics.summary.total_applications}</div>
-                </div>
-                <div style={{ backgroundColor: '#f3f4f6', padding: '12px', borderRadius: '8px', textAlign: 'center' }}>
-                  <div style={{ color: '#6b7280', fontSize: '12px', marginBottom: '4px' }}>Ignored</div>
-                  <div style={{ color: '#1f2937', fontSize: '24px', fontWeight: 'bold' }}>{platformAnalytics.summary.total_ignored}</div>
-                </div>
-                <div style={{ backgroundColor: '#f3f4f6', padding: '12px', borderRadius: '8px', textAlign: 'center' }}>
-                  <div style={{ color: '#6b7280', fontSize: '12px', marginBottom: '4px' }}>Conversion</div>
-                  <div style={{ color: '#10b981', fontSize: '24px', fontWeight: 'bold' }}>{platformAnalytics.summary.conversion_rate}%</div>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h4 style={{ color: '#1f2937', marginBottom: '12px', fontSize: '14px', fontWeight: '600' }}>
-                🌐 Per-Platform Breakdown
-              </h4>
-              <div style={{ overflowX: 'auto' }}>
-                <table className="applications-table" style={{ width: '100%' }}>
-                  <thead>
-                    <tr>
-                      <th>Platform</th>
-                      <th>Status</th>
-                      <th>Views</th>
-                      <th>Clicks</th>
-                      <th>Applications</th>
-                      <th>Ignored</th>
-                      <th>Conversion</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Object.entries(platformAnalytics.platforms || {}).map(([platform, data]) => (
-                      <tr key={platform}>
-                        <td style={{ fontWeight: '600', textTransform: 'capitalize' }}>
-                          {platform.replace('_', ' ')}
-                        </td>
-                        <td>
-                          <span style={{
-                            backgroundColor: data.status === 'published' ? '#d1fae5' : '#fee2e2',
-                            color: data.status === 'published' ? '#065f46' : '#7f1d1d',
-                            padding: '4px 8px',
-                            borderRadius: '4px',
-                            fontSize: '12px',
-                            fontWeight: '600'
-                          }}>
-                            {data.status}
-                          </span>
-                        </td>
-                        <td>{data.views || 0}</td>
-                        <td>{data.clicks || 0}</td>
-                        <td style={{ fontWeight: '600', color: '#10b981' }}>{data.applications || 0}</td>
-                        <td style={{ color: '#ef4444' }}>{data.ignored || 0}</td>
-                        <td>
-                          {data.views > 0 
-                            ? `${((data.applications / data.views) * 100).toFixed(1)}%`
-                            : '0%'
-                          }
-                        </td>
+      {/* Dynamic Details Panel - Shows based on selected stat */}
+      {selectedStat && (
+        <div className="applications-card" style={{ animation: 'fadeIn 0.3s ease' }}>
+          {selectedStat === 'jobs' && (
+            <>
+              <h3 className="applications-title">💼 All Jobs ({jobs.length})</h3>
+              {jobs.length > 0 ? (
+                <div style={{ overflowX: 'auto' }}>
+                  <table className="applications-table">
+                    <thead>
+                      <tr>
+                        <th>Title</th>
+                        <th>Department</th>
+                        <th>Location</th>
+                        <th>Experience</th>
+                        <th>Status</th>
+                        <th>Action</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <p style={{ color: '#7f8c8d', textAlign: 'center', padding: '24px 0' }}>
-            No platform analytics available. Create and publish a job to see analytics.
-          </p>
-        )}
-      </div>
+                    </thead>
+                    <tbody>
+                      {jobs.map((job) => (
+                        <tr key={job.id}>
+                          <td style={{ fontWeight: '600' }}>{job.title}</td>
+                          <td>{job.department || 'N/A'}</td>
+                          <td>{job.location}</td>
+                          <td>{job.experience_required}</td>
+                          <td>
+                            <span style={{
+                              backgroundColor: job.status === 'active' ? '#d1fae5' : '#fee2e2',
+                              color: job.status === 'active' ? '#065f46' : '#7f1d1d',
+                              padding: '4px 8px',
+                              borderRadius: '4px',
+                              fontSize: '12px',
+                              fontWeight: '600'
+                            }}>
+                              {job.status || 'Active'}
+                            </span>
+                          </td>
+                          <td>
+                            <button 
+                              onClick={() => onNavigate('jobs')}
+                              style={{ padding: '4px 12px', fontSize: '12px', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                            >
+                              View
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p style={{ color: '#7f8c8d', textAlign: 'center', padding: '24px 0' }}>No jobs created yet</p>
+              )}
+            </>
+          )}
+
+          {selectedStat === 'applications' && (
+            <>
+              <h3 className="applications-title">📝 All Applications ({candidates.length})</h3>
+              {candidates.length > 0 ? (
+                <div style={{ overflowX: 'auto' }}>
+                  <table className="applications-table">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Skills</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {candidates.map((candidate) => (
+                        <tr key={candidate.id}>
+                          <td style={{ fontWeight: '600' }}>{candidate.name}</td>
+                          <td>{candidate.email}</td>
+                          <td>
+                            {(candidate.skills || []).slice(0, 3).map(skill => (
+                              <span key={skill} className="skill-badge">{skill}</span>
+                            ))}
+                          </td>
+                          <td>
+                            <span style={{
+                              color: (candidate.score || 0) >= 75 ? '#10b981' : (candidate.score || 0) >= 50 ? '#f59e0b' : '#6b7280',
+                              fontWeight: '600'
+                            }}>
+                              {candidate.score || 'N/A'}
+                            </span>
+                          </td>
+                          <td>{candidate.status || 'Applied'}</td>
+                          <td>
+                            <button 
+                              onClick={() => onNavigate('candidates')}
+                              style={{ padding: '4px 12px', fontSize: '12px', backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                            >
+                              View
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p style={{ color: '#7f8c8d', textAlign: 'center', padding: '24px 0' }}>No applications yet</p>
+              )}
+            </>
+          )}
+
+          {selectedStat === 'high' && (
+            <>
+              <h3 className="applications-title">🚨 High Priority Candidates ({stats.high_priority})</h3>
+              {candidates.filter(c => (c.score || 0) >= 75).length > 0 ? (
+                <div style={{ overflowX: 'auto' }}>
+                  <table className="applications-table">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Skills</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {candidates.filter(c => (c.score || 0) >= 75).map((candidate) => (
+                        <tr key={candidate.id} style={{ backgroundColor: '#fef2f2' }}>
+                          <td style={{ fontWeight: '600' }}>{candidate.name}</td>
+                          <td>{candidate.email}</td>
+                          <td>
+                            {(candidate.skills || []).slice(0, 3).map(skill => (
+                              <span key={skill} className="skill-badge">{skill}</span>
+                            ))}
+                          </td>
+                          <td>
+                            <span style={{ color: '#10b981', fontWeight: '700', fontSize: '16px' }}>
+                              {candidate.score}%
+                            </span>
+                          </td>
+                          <td>{candidate.status || 'Applied'}</td>
+                          <td>
+                            <button 
+                              onClick={() => onNavigate('candidates')}
+                              style={{ padding: '4px 12px', fontSize: '12px', backgroundColor: '#ef4444', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                            >
+                              Review Now
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p style={{ color: '#7f8c8d', textAlign: 'center', padding: '24px 0' }}>No high priority candidates. Score candidates to identify top talent!</p>
+              )}
+            </>
+          )}
+
+          {selectedStat === 'medium' && (
+            <>
+              <h3 className="applications-title">⏳ Medium Priority Candidates ({stats.medium_priority})</h3>
+              {candidates.filter(c => (c.score || 0) >= 50 && (c.score || 0) < 75).length > 0 ? (
+                <div style={{ overflowX: 'auto' }}>
+                  <table className="applications-table">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Skills</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {candidates.filter(c => (c.score || 0) >= 50 && (c.score || 0) < 75).map((candidate) => (
+                        <tr key={candidate.id} style={{ backgroundColor: '#fffbeb' }}>
+                          <td style={{ fontWeight: '600' }}>{candidate.name}</td>
+                          <td>{candidate.email}</td>
+                          <td>
+                            {(candidate.skills || []).slice(0, 3).map(skill => (
+                              <span key={skill} className="skill-badge">{skill}</span>
+                            ))}
+                          </td>
+                          <td>
+                            <span style={{ color: '#f59e0b', fontWeight: '700', fontSize: '16px' }}>
+                              {candidate.score}%
+                            </span>
+                          </td>
+                          <td>{candidate.status || 'Applied'}</td>
+                          <td>
+                            <button 
+                              onClick={() => onNavigate('candidates')}
+                              style={{ padding: '4px 12px', fontSize: '12px', backgroundColor: '#f59e0b', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                            >
+                              Review
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p style={{ color: '#7f8c8d', textAlign: 'center', padding: '24px 0' }}>No medium priority candidates. Score candidates to categorize them!</p>
+              )}
+            </>
+          )}
+        </div>
+      )}
 
       <div className="applications-card">
         <h3 className="applications-title">Recent Applications</h3>

@@ -1,71 +1,77 @@
+/* ===== Offer Management Container ===== */
 .offer-management-container {
-  padding: 20px 0;
+  padding: 1rem 0;
 }
 
 .offer-back-button {
-  display: inline-block;
-  padding: 10px 16px;
-  background-color: #6b7280;
-  color: white;
-  border: none;
-  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--bg-light);
+  color: var(--text-medium);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
-  margin-bottom: 24px;
-  transition: background-color 0.3s ease;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  transition: all 0.2s;
 }
 
 .offer-back-button:hover {
-  background-color: #4b5563;
+  background-color: var(--border-color);
 }
 
+/* ===== Offer Card ===== */
 .offer-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  padding: 32px;
-  margin-bottom: 30px;
+  background: var(--bg-white);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .offer-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 1.5rem;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 0.75rem;
 }
 
 .offer-title {
-  font-size: 28px;
-  font-weight: bold;
-  color: #1f2937;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-dark);
 }
 
 .btn-create-offer {
-  padding: 12px 24px;
-  background-color: #3498db;
+  padding: 0.625rem 1.25rem;
+  background-color: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
-  font-weight: 600;
-  font-size: 14px;
-  transition: all 0.3s ease;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: background 0.2s;
 }
 
 .btn-create-offer:hover {
-  background-color: #2980b9;
-  transform: scale(1.05);
+  background-color: var(--primary-hover);
 }
 
+/* ===== Offer Form ===== */
 .offer-form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  margin-bottom: 32px;
-  padding: 24px;
-  background-color: #f9fafb;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
+  background-color: var(--bg-light);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
 }
 
@@ -75,88 +81,88 @@
 }
 
 .form-label {
-  font-size: 14px;
-  font-weight: 600;
-  color: #374151;
-  margin-bottom: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-medium);
+  margin-bottom: 0.5rem;
 }
 
 .form-input,
 .form-select,
 .form-textarea {
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 14px;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 0.875rem;
   font-family: inherit;
-  transition: all 0.3s ease;
-  background-color: white;
+  transition: border-color 0.2s;
+  background-color: var(--bg-white);
 }
 
 .form-input:focus,
 .form-select:focus,
 .form-textarea:focus {
   outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  border-color: var(--primary-color);
 }
 
 .form-textarea {
   resize: vertical;
-  min-height: 100px;
+  min-height: 80px;
 }
 
 .form-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.25rem;
 }
 
 .form-button-group {
   display: flex;
-  gap: 12px;
-  margin-top: 12px;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
   justify-content: flex-end;
 }
 
 .btn-submit {
-  padding: 10px 24px;
-  background-color: #10b981;
+  padding: 0.625rem 1.25rem;
+  background-color: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
-  font-weight: 600;
-  font-size: 14px;
-  transition: background-color 0.3s ease;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: background 0.2s;
 }
 
 .btn-submit:hover {
-  background-color: #059669;
+  background-color: var(--primary-hover);
 }
 
 .btn-cancel-form {
-  padding: 10px 24px;
-  background-color: #ef4444;
-  color: white;
-  border: none;
-  border-radius: 8px;
+  padding: 0.625rem 1.25rem;
+  background-color: var(--bg-white);
+  color: var(--text-medium);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
   cursor: pointer;
-  font-weight: 600;
-  font-size: 14px;
-  transition: background-color 0.3s ease;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s;
 }
 
 .btn-cancel-form:hover {
-  background-color: #dc2626;
+  background-color: var(--border-color);
 }
 
+/* ===== Offers Table ===== */
 .offers-title {
-  font-size: 22px;
-  font-weight: bold;
-  color: #1f2937;
-  margin-bottom: 24px;
-  margin-top: 24px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 1.25rem;
+  margin-top: 1.25rem;
 }
 
 .offers-table {
@@ -165,81 +171,86 @@
 }
 
 .offers-table thead {
-  background-color: #f3f4f6;
+  background-color: var(--bg-light);
 }
 
 .offers-table th {
-  padding: 16px;
+  padding: 0.75rem 1rem;
   text-align: left;
   font-weight: 600;
-  color: #374151;
-  border-bottom: 2px solid #d1d5db;
+  color: var(--text-medium);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.875rem;
 }
 
 .offers-table td {
-  padding: 16px;
-  border-bottom: 1px solid #e5e7eb;
-  color: #374151;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-dark);
+  font-size: 0.875rem;
 }
 
 .offers-table tbody tr:hover {
-  background-color: #f9fafb;
-  transition: background-color 0.2s ease;
+  background-color: var(--bg-light);
 }
 
+/* ===== Status Badges ===== */
 .status-badge {
   display: inline-block;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 0.25rem 0.625rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
 .status-accepted {
-  background-color: #dcfce7;
-  color: #166534;
+  background-color: #ecfdf5;
+  color: #065f46;
 }
 
 .status-pending {
-  background-color: #fef3c7;
-  color: #78350f;
+  background-color: #fffbeb;
+  color: #92400e;
 }
 
 .status-rejected {
-  background-color: #fee2e2;
-  color: #7f1d1d;
+  background-color: #fef2f2;
+  color: #991b1b;
 }
 
+/* ===== Offer Actions ===== */
 .offer-actions {
   display: flex;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .btn-action {
-  padding: 6px 12px;
-  background-color: #3498db;
+  padding: 0.375rem 0.75rem;
+  background-color: var(--primary-color);
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 12px;
-  transition: background-color 0.3s ease;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: background 0.2s;
 }
 
 .btn-action:hover {
-  background-color: #2980b9;
+  background-color: var(--primary-hover);
 }
 
 .no-offers {
   text-align: center;
-  padding: 32px 16px;
-  color: #7f8c8d;
-  font-size: 16px;
+  padding: 2rem 1rem;
+  color: var(--text-light);
+  font-size: 0.875rem;
 }
 
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
   .offer-card {
-    padding: 16px;
+    padding: 1rem;
   }
 
   .offer-header {
@@ -251,13 +262,9 @@
     width: 100%;
   }
 
-  .offers-table {
-    font-size: 12px;
-  }
-
   .offers-table th,
   .offers-table td {
-    padding: 8px;
+    padding: 0.5rem;
   }
 
   .form-row {

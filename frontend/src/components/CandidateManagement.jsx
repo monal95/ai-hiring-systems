@@ -142,6 +142,67 @@ const CandidateManagement = ({ onNavigate }) => {
     }
   };
 
+  const handleRemoveCandidate = async (candidate, reason = 'After careful review of your application') => {
+    const confirmRemove = window.confirm(
+      `Are you sure you want to remove ${candidate.name}?\n\nA rejection email will be sent to: ${candidate.email}`
+    );
+    
+    if (!confirmRemove) return;
+
+    try {
+      const response = await axios.delete(
+        `http://localhost:5000/api/candidates/${candidate.id}`,
+        {
+          data: { 
+            reason: reason,
+            send_email: true 
+          }
+        }
+      );
+      
+      if (response.data.success) {
+        const emailStatus = response.data.email_sent 
+          ? `📧 Rejection email sent to: ${response.data.candidate_email}`
+          : '⚠️ Email could not be sent (check SendGrid configuration)';
+        
+        alert(
+          `✅ Candidate Removed Successfully!\n\n${emailStatus}`
+        );
+        
+        // Refresh candidates list
+        fetchCandidates();
+        setSelectedCandidate(null);
+      }
+    } catch (error) {
+      console.error('Error removing candidate:', error);
+      alert('Failed to remove candidate. Please try again.');
+    }
+  };
+
+  const handleSendRejectionEmail = async (candidate) => {
+    const reason = prompt(
+      'Enter rejection reason (this will be included in the email):',
+      'After careful review of your qualifications and experience'
+    );
+    
+    if (!reason) return;
+
+    try {
+      const response = await axios.post(
+        `http://localhost:5000/api/candidates/${candidate.id}/send-rejection`,
+        { reason }
+      );
+      
+      if (response.data.success) {
+        alert(`✅ Rejection email sent to ${candidate.email}`);
+        fetchCandidates(); // Refresh to show updated status
+      }
+    } catch (error) {
+      console.error('Error sending rejection email:', error);
+      alert('Failed to send rejection email.');
+    }
+  };
+
   if (loading) {
     return <div style={{ textAlign: 'center', padding: '40px' }}>Loading candidates...</div>;
   }
@@ -150,8 +211,22 @@ const CandidateManagement = ({ onNavigate }) => {
     <div style={{ display: 'flex', height: '100vh', backgroundColor: '#f9fafb' }}>
       {/* Candidate List */}
       <div style={{ width: '25%', backgroundColor: 'white', borderRight: '1px solid #e5e7eb', overflowY: 'auto' }}>
-        <div style={{ padding: '16px', borderBottom: '1px solid #e5e7eb' }}>
+        <div style={{ padding: '16px', borderBottom: '1px solid #e5e7eb', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h3 style={{ margin: 0, fontSize: '16px', color: '#1f2937' }}>Candidates ({candidates.length})</h3>
+          <button
+            onClick={fetchCandidates}
+            style={{
+              padding: '4px 8px',
+              fontSize: '12px',
+              backgroundColor: '#f3f4f6',
+              border: '1px solid #d1d5db',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+            title="Refresh candidates"
+          >
+            ⟳
+          </button>
         </div>
         <div>
           {candidates.map(candidate => (
@@ -200,8 +275,52 @@ const CandidateManagement = ({ onNavigate }) => {
         {selectedCandidate ? (
           <>
             <div style={{ marginBottom: '24px' }}>
-              <h1 style={{ margin: '0 0 8px 0', color: '#1f2937' }}>{selectedCandidate.name}</h1>
-              <p style={{ margin: 0, color: '#6b7280' }}>{selectedCandidate.email} • {selectedCandidate.phone}</p>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div>
+                  <h1 style={{ margin: '0 0 8px 0', color: '#1f2937' }}>{selectedCandidate.name}</h1>
+                  <p style={{ margin: 0, color: '#6b7280' }}>{selectedCandidate.email} • {selectedCandidate.phone}</p>
+                </div>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button
+                    onClick={() => handleSendRejectionEmail(selectedCandidate)}
+                    style={{
+                      padding: '8px 16px',
+                      backgroundColor: '#f97316',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                      fontSize: '14px',
+                      fontWeight: '500',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px'
+                    }}
+                    title="Send rejection email without removing"
+                  >
+                    📧 Send Rejection Email
+                  </button>
+                  <button
+                    onClick={() => handleRemoveCandidate(selectedCandidate)}
+                    style={{
+                      padding: '8px 16px',
+                      backgroundColor: '#ef4444',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                      fontSize: '14px',
+                      fontWeight: '500',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px'
+                    }}
+                    title="Remove candidate and send rejection email"
+                  >
+                    ❌ Remove Candidate
+                  </button>
+                </div>
+              </div>
             </div>
 
             {/* Tabs */}

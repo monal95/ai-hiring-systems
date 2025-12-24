@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Dashboard from './components/Dashboard';
 import JobCreation from './components/JobCreation';
@@ -9,10 +9,51 @@ import OfferManagement from './components/OfferManagement';
 import JobsList from './components/JobsList';
 import CandidateManagement from './components/CandidateManagement';
 import JobManagement from './components/JobManagement';
+import JobApplicationForm from './components/JobApplicationForm';
+import PrivacyPolicy from './components/PrivacyPolicy';
 
 function App() {
   const [currentView, setCurrentView] = useState('dashboard');
   const [selectedJob, setSelectedJob] = useState(null);
+  const [applicationJobId, setApplicationJobId] = useState(null);
+
+  // Check URL for application form route on load
+  useEffect(() => {
+    const path = window.location.pathname;
+    const applyMatch = path.match(/^\/apply\/(.+)$/);
+    const linkedInCallback = path.includes('/auth/linkedin/callback');
+    
+    if (applyMatch) {
+      setApplicationJobId(applyMatch[1]);
+      setCurrentView('public-application');
+    } else if (linkedInCallback) {
+      // Handle LinkedIn OAuth callback - redirect to create-job view
+      // The LinkedInLogin component will handle the token exchange
+      setCurrentView('create-job');
+    }
+  }, []);
+
+  // Handle browser back/forward
+  useEffect(() => {
+    const handlePopState = () => {
+      const path = window.location.pathname;
+      const applyMatch = path.match(/^\/apply\/(.+)$/);
+      if (applyMatch) {
+        setApplicationJobId(applyMatch[1]);
+        setCurrentView('public-application');
+      } else {
+        setCurrentView('dashboard');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  // If on public application form, render only the form (no navbar)
+  if (currentView === 'public-application' && applicationJobId) {
+    return <JobApplicationForm jobId={applicationJobId} />;
+  }
 
   const renderView = () => {
     switch(currentView) {
@@ -45,6 +86,8 @@ function App() {
         return <InterviewScheduler onBack={() => setCurrentView('candidates')} />;
       case 'offers':
         return <OfferManagement onBack={() => setCurrentView('dashboard')} />;
+      case 'privacy-policy':
+        return <PrivacyPolicy onBack={() => setCurrentView('dashboard')} />;
       default:
         return <Dashboard onNavigate={setCurrentView} />;
     }
@@ -52,7 +95,7 @@ function App() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#f5f5f5' }}>
-      <nav style={{ background: 'linear-gradient(90deg, #3498db 0%, #8e44ad 100%)', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+      <nav style={{ background: '#2563eb' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '64px', flexWrap: 'wrap' }}>
           <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: 'white', margin: 0 }}>🎯 GCC Hiring System</h1>
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
@@ -60,7 +103,7 @@ function App() {
               onClick={() => setCurrentView('dashboard')}
               style={{
                 padding: '8px 16px',
-                backgroundColor: currentView === 'dashboard' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.2)',
+                backgroundColor: currentView === 'dashboard' ? '#2563eb' : '#2563eb',
                 color: 'white',
                 border: 'none',
                 borderRadius: '8px',
@@ -68,8 +111,8 @@ function App() {
                 fontSize: '14px',
                 transition: 'all 0.3s ease',
               }}
-              onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'}
-              onMouseLeave={(e) => e.target.style.backgroundColor = currentView === 'dashboard' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.2)'}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#2563eb'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = currentView === 'dashboard' ? '#2563eb' : '#2563eb'}
             >
               Dashboard
             </button>
@@ -77,7 +120,7 @@ function App() {
               onClick={() => setCurrentView('create-job')}
               style={{
                 padding: '8px 16px',
-                backgroundColor: currentView === 'create-job' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.2)',
+                backgroundColor: currentView === 'create-job' ? '#2563eb' : '#2563eb',
                 color: 'white',
                 border: 'none',
                 borderRadius: '8px',
@@ -85,8 +128,8 @@ function App() {
                 fontSize: '14px',
                 transition: 'all 0.3s ease',
               }}
-              onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'}
-              onMouseLeave={(e) => e.target.style.backgroundColor = currentView === 'create-job' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.2)'}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#2563eb'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = currentView === 'create-job' ? '#2563eb' : '#2563eb'}
             >
               Create Job
             </button>
@@ -94,7 +137,7 @@ function App() {
               onClick={() => setCurrentView('job-management')}
               style={{
                 padding: '8px 16px',
-                backgroundColor: currentView === 'job-management' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.2)',
+                backgroundColor: currentView === 'job-management' ? '#2563eb' : '#2563eb',
                 color: 'white',
                 border: 'none',
                 borderRadius: '8px',
@@ -102,8 +145,8 @@ function App() {
                 fontSize: '14px',
                 transition: 'all 0.3s ease',
               }}
-              onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'}
-              onMouseLeave={(e) => e.target.style.backgroundColor = currentView === 'job-management' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.2)'}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#2563eb'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = currentView === 'job-management' ? '#2563eb' : '#2563eb'}
             >
               Job Management
             </button>
@@ -111,7 +154,7 @@ function App() {
               onClick={() => setCurrentView('candidates-management')}
               style={{
                 padding: '8px 16px',
-                backgroundColor: currentView === 'candidates-management' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.2)',
+                backgroundColor: currentView === 'candidates-management' ? '#2563eb' : '#2563eb',
                 color: 'white',
                 border: 'none',
                 borderRadius: '8px',
@@ -119,8 +162,8 @@ function App() {
                 fontSize: '14px',
                 transition: 'all 0.3s ease',
               }}
-              onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'}
-              onMouseLeave={(e) => e.target.style.backgroundColor = currentView === 'candidates-management' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.2)'}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#2563eb'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = currentView === 'candidates-management' ? '#2563eb' : '#2563eb'}
             >
               Candidate Management
             </button>
@@ -128,7 +171,7 @@ function App() {
               onClick={() => setCurrentView('offers')}
               style={{
                 padding: '8px 16px',
-                backgroundColor: currentView === 'offers' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.2)',
+                backgroundColor: currentView === 'offers' ? '#2563eb' : '#2563eb',
                 color: 'white',
                 border: 'none',
                 borderRadius: '8px',
@@ -136,8 +179,8 @@ function App() {
                 fontSize: '14px',
                 transition: 'all 0.3s ease',
               }}
-              onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'}
-              onMouseLeave={(e) => e.target.style.backgroundColor = currentView === 'offers' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.2)'}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#2563eb'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = currentView === 'offers' ? '#2563eb' : '#2563eb'}
             >
               Offers
             </button>

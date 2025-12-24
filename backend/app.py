@@ -1,8 +1,9 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 from flask_cors import CORS
 import os
 import json
 import random
+import secrets
 from datetime import datetime, timedelta
 from models.resume_parser import ResumeParser
 from models.skill_matcher import SkillMatcher
@@ -11,9 +12,34 @@ from models.ai_recommendations import (
     interview_panel_recommender, assessment_recommender
 )
 from config.api_integrations import integration_manager
+from config.email_config import (
+    send_email,
+    send_rejection_email as sendgrid_rejection_email,
+    send_interview_invitation,
+    send_offer_letter,
+    send_application_confirmation
+)
+from config.groq_config import (
+    generate_job_description,
+    suggest_skills,
+    generate_rejection_email as groq_rejection_email,
+    generate_application_confirmation_email,
+    generate_shortlisted_email,
+    generate_linkedin_post
+)
+from routes.linkedin_auth import linkedin_bp
+from routes.linkedin_share import linkedin_share_bp
 
 app = Flask(__name__)
-CORS(app)
+app.secret_key = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(32))
+CORS(app, supports_credentials=True)
+
+# Auto-rejection threshold
+AUTO_REJECT_THRESHOLD = 60  # Candidates scoring below 60% are auto-rejected
+
+# Register LinkedIn blueprints
+app.register_blueprint(linkedin_bp)
+app.register_blueprint(linkedin_share_bp)
 
 # Initialize models
 parser = ResumeParser()
@@ -126,6 +152,46 @@ def get_dashboard_stats():
     }
     
     return jsonify(stats), 200
+
+
+# ======================== GROQ AI ENDPOINTS ========================
+
+@app.route('/api/ai/generate-job-description', methods=['POST'])
+def ai_generate_job_description():
+    """Generate job description using Groq AI"""
+    data = request.json
+    job_title = data.get('job_title', '')
+    department = data.get('department', '')
+    location = data.get('location', '')
+    
+    if not job_title:
+        return jsonify({'error': 'Job title is required'}), 400
+    
+    result = generate_job_description(job_title, department, location)
+    return jsonify(result), 200
+
+
+@app.route('/api/ai/suggest-skills', methods=['POST'])
+def ai_suggest_skills():
+    """Suggest skills for a job title using Groq AI"""
+    data = request.json
+    job_title = data.get('job_title', '')
+    current_skills = data.get('current_skills', [])
+    
+    if not job_title:
+        return jsonify({'error': 'Job title is required'}), 400
+    
+    skills = suggest_skills(job_title, current_skills)
+    return jsonify({'skills': skills}), 200
+
+
+@app.route('/api/ai/generate-linkedin-post', methods=['POST'])
+def ai_generate_linkedin_post():
+    """Generate LinkedIn post using Groq AI"""
+    job_data = request.json
+    post_content = generate_linkedin_post(job_data)
+    return jsonify({'post_content': post_content}), 200
+
 
 @app.route('/api/jobs', methods=['GET', 'POST'])
 def handle_jobs():
@@ -341,9 +407,140 @@ def apply_job():
     job['applications'] = job.get('applications', 0) + 1
     save_json(JOBS_FILE, jobs)
     
+    # Send application confirmation email using AI-generated content
+    email_content = generate_application_confirmation_email(
+        candidate_name=candidate['name'],
+        job_title=job.get('title', 'the position')
+    )
+    
+    email_result = send_email(
+        to_email=candidate['email'],
+        subject=email_content.get('subject', 'Application Received'),
+        html_content=email_content.get('html_body', email_content.get('body', ''))
+    )
+    
+    print(f"[Application] {candidate['name']} applied for {job.get('title')} - Email sent: {email_result.get('success')}")
+    
     return jsonify({
         'message': 'Application submitted successfully',
-        'candidate': candidate
+        'candidate': candidate,
+        'email_sent': email_result.get('success', False)
+    }), 201
+
+@app.route('/api/applications/public', methods=['POST'])
+def public_apply():
+    """Public application endpoint for job application form"""
+    
+    # Get form data
+    job_id = request.form.get('jobId')
+    full_name = request.form.get('fullName')
+    email = request.form.get('email')
+    phone = request.form.get('phone')
+    current_location = request.form.get('currentLocation')
+    total_experience = request.form.get('totalExperience')
+    expected_salary = request.form.get('expectedSalary')
+    notice_period = request.form.get('noticePeriod')
+    current_employer = request.form.get('currentEmployer', '')
+    current_designation = request.form.get('currentDesignation', '')
+    work_experience = request.form.get('workExperience', '')
+    education = request.form.get('education', '')
+    linkedin_profile = request.form.get('linkedinProfile', '')
+    key_skills = request.form.get('keySkills', '')
+    
+    # Find job
+    job = next((j for j in jobs if j['id'] == job_id), None)
+    if not job:
+        return jsonify({'error': 'Job not found'}), 404
+    
+    # Handle resume upload
+    resume_path = None
+    parsed_skills = []
+    
+    if 'resume' in request.files:
+        resume = request.files['resume']
+        if resume.filename:
+            resume_filename = f"{datetime.now().timestamp()}_{resume.filename}"
+            resume_path = os.path.join('data/resumes', resume_filename)
+            resume.save(resume_path)
+            
+            # Parse resume for skills
+            try:
+                parsed_data = parser.parse_resume(resume_path)
+                if parsed_data and parsed_data.get('skills'):
+                    parsed_skills = parsed_data['skills']
+            except:
+                pass
+    
+    # Combine parsed skills with manually entered skills
+    manual_skills = [s.strip() for s in key_skills.split(',') if s.strip()]
+    all_skills = list(set(parsed_skills + manual_skills))
+    
+    # Calculate match score
+    match_score = matcher.calculate_match_score(
+        all_skills, 
+        job.get('requirements', {})
+    ) if all_skills else 50
+    
+    missing_skills = matcher.get_missing_skills(
+        all_skills,
+        job.get('requirements', {})
+    ) if all_skills else []
+    
+    category = matcher.categorize_candidate(match_score)
+    
+    # Create candidate record
+    candidate = {
+        'id': f"CAND{len(candidates) + 1}",
+        'job_id': job_id,
+        'name': full_name,
+        'email': email,
+        'phone': phone,
+        'current_location': current_location,
+        'total_experience': total_experience,
+        'expected_salary': expected_salary,
+        'notice_period': notice_period,
+        'current_employer': current_employer,
+        'current_designation': current_designation,
+        'work_experience': work_experience,
+        'education': education,
+        'linkedin_profile': linkedin_profile,
+        'skills': all_skills,
+        'experience_years': int(total_experience.split('-')[0].replace('+', '').strip()) if total_experience else 0,
+        'match_score': match_score,
+        'missing_skills': missing_skills,
+        'priority': category['priority'],
+        'recommended_action': category['action'],
+        'status': 'Applied',
+        'applied_at': datetime.now().isoformat(),
+        'resume_path': resume_path,
+        'source': 'public_application_form'
+    }
+    
+    candidates.append(candidate)
+    save_json(CANDIDATES_FILE, candidates)
+    
+    # Update job application count
+    job['applications'] = job.get('applications', 0) + 1
+    save_json(JOBS_FILE, jobs)
+    
+    # Send application confirmation email using AI-generated content
+    email_content = generate_application_confirmation_email(
+        candidate_name=full_name,
+        job_title=job.get('title', 'the position')
+    )
+    
+    email_result = send_email(
+        to_email=email,
+        subject=email_content.get('subject', 'Application Received'),
+        html_content=email_content.get('html_body', email_content.get('body', ''))
+    )
+    
+    print(f"[Application] {full_name} applied for {job.get('title')} - Email sent: {email_result.get('success')}")
+    
+    return jsonify({
+        'message': 'Application submitted successfully',
+        'candidate_id': candidate['id'],
+        'email_sent': email_result.get('success', False)
     }), 201
 
 @app.route('/api/candidates', methods=['GET'])
@@ -357,9 +554,9 @@ def get_candidates():
     
     return jsonify(candidates), 200
 
-@app.route('/api/candidates/<candidate_id>', methods=['GET', 'PUT'])
+@app.route('/api/candidates/<candidate_id>', methods=['GET', 'PUT', 'DELETE'])
 def handle_candidate(candidate_id):
-    """Get or update candidate details"""
+    """Get, update, or delete candidate details"""
     candidate = next((c for c in candidates if c['id'] == candidate_id), None)
     
     if not candidate:
@@ -371,37 +568,241 @@ def handle_candidate(candidate_id):
         save_json(CANDIDATES_FILE, candidates)
         return jsonify(candidate), 200
     
+    if request.method == 'DELETE':
+        # Get rejection reason from request
+        data = request.json or {}
+        reason = data.get('reason', 'After careful consideration')
+        should_send_email = data.get('send_email', True)
+        
+        # Get job title for email
+        job = next((j for j in jobs if j['id'] == candidate.get('job_id')), None)
+        job_title = job.get('title', 'the position') if job else 'the position'
+        
+        email_result = {'success': False, 'message': 'Email not sent'}
+        
+        if should_send_email:
+            # Send real rejection email via SendGrid
+            email_result = sendgrid_rejection_email(
+                candidate_name=candidate.get('name', 'Candidate'),
+                candidate_email=candidate.get('email', ''),
+                job_title=job_title,
+                skills=candidate.get('skills', [])
+            )
+        
+        # Remove candidate from list
+        candidates.remove(candidate)
+        save_json(CANDIDATES_FILE, candidates)
+        
+        return jsonify({
+            'success': True,
+            'message': 'Candidate removed successfully',
+            'email_sent': email_result.get('success', False),
+            'email_result': email_result,
+            'candidate_name': candidate.get('name'),
+            'candidate_email': candidate.get('email')
+        }), 200
+    
     return jsonify(candidate), 200
+
+
+def generate_rejection_email(candidate: dict, reason: str) -> dict:
+    """Generate an AI-powered professional rejection email"""
+    name = candidate.get('name', 'Candidate')
+    email = candidate.get('email', '')
+    job_applied = candidate.get('job_id', 'the position')
+    skills = candidate.get('skills', [])
+    
+    # Get job title if available
+    job = next((j for j in jobs if j['id'] == job_applied), None)
+    job_title = job.get('title', 'the position') if job else 'the position'
+    
+    subject = f"Update on Your Application for {job_title}"
+    
+    body = f"""Dear {name},
+
+Thank you for taking the time to apply for the {job_title} position and for your interest in joining our team.
+
+{reason}, we have decided to move forward with other candidates whose qualifications more closely match our current requirements for this role.
+
+We were impressed by your background{' in ' + ', '.join(skills[:3]) if skills else ''}, and we encourage you to apply for future openings that match your skill set.
+
+We truly appreciate the effort you put into your application and wish you the very best in your career journey.
+
+If you have any questions, please don't hesitate to reach out.
+
+Warm regards,
+
+The Hiring Team
+GCC Hiring System
+
+---
+This is an automated email sent via GCC Hiring System.
+"""
+
+    html_body = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {{ font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; }}
+        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+        .header {{ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }}
+        .content {{ background: #ffffff; padding: 30px; border: 1px solid #e5e7eb; }}
+        .footer {{ background: #f9fafb; padding: 20px; text-align: center; font-size: 12px; color: #6b7280; border-radius: 0 0 8px 8px; }}
+        .highlight {{ color: #4f46e5; font-weight: 600; }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 style="margin: 0;">Application Update</h1>
+        </div>
+        <div class="content">
+            <p>Dear <strong>{name}</strong>,</p>
+            
+            <p>Thank you for taking the time to apply for the <span class="highlight">{job_title}</span> position and for your interest in joining our team.</p>
+            
+            <p>{reason}, we have decided to move forward with other candidates whose qualifications more closely match our current requirements for this role.</p>
+            
+            <p>We were impressed by your background{' in <strong>' + ', '.join(skills[:3]) + '</strong>' if skills else ''}, and we encourage you to apply for future openings that match your skill set.</p>
+            
+            <p>We truly appreciate the effort you put into your application and wish you the very best in your career journey.</p>
+            
+            <p>If you have any questions, please don't hesitate to reach out.</p>
+            
+            <p>Warm regards,<br><strong>The Hiring Team</strong></p>
+        </div>
+        <div class="footer">
+            <p>This is an automated email sent via GCC Hiring System</p>
+            <p>© 2024 GCC Hiring System. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
+"""
+    
+    return {
+        'to': email,
+        'subject': subject,
+        'body': body,
+        'html_body': html_body,
+        'sent_at': datetime.now().isoformat(),
+        'type': 'rejection'
+    }
+
+
+@app.route('/api/candidates/<candidate_id>/send-rejection', methods=['POST'])
+def send_rejection_email_endpoint(candidate_id):
+    """Send rejection email to candidate without removing them"""
+    candidate = next((c for c in candidates if c['id'] == candidate_id), None)
+    
+    if not candidate:
+        return jsonify({'error': 'Candidate not found'}), 404
+    
+    # Get job title for email
+    job = next((j for j in jobs if j['id'] == candidate.get('job_id')), None)
+    job_title = job.get('title', 'the position') if job else 'the position'
+    
+    # Send real rejection email via SendGrid
+    email_result = sendgrid_rejection_email(
+        candidate_name=candidate.get('name', 'Candidate'),
+        candidate_email=candidate.get('email', ''),
+        job_title=job_title,
+        skills=candidate.get('skills', [])
+    )
+    
+    # Update candidate status
+    candidate['status'] = 'Rejected'
+    candidate['rejection_email_sent'] = email_result.get('success', False)
+    candidate['rejection_date'] = datetime.now().isoformat()
+    save_json(CANDIDATES_FILE, candidates)
+    
+    return jsonify({
+        'success': email_result.get('success', False),
+        'message': email_result.get('message', 'Email sent'),
+        'email_result': email_result
+    }), 200
+
 
 # ======================== PHASE 1: CANDIDATE SCREENING ========================
 
 @app.route('/api/candidates/<candidate_id>/score', methods=['GET'])
 def get_candidate_score(candidate_id):
-    """Get AI-generated candidate score"""
+    """Get AI-generated candidate score with auto-rejection for low scores"""
     job_id = request.args.get('job_id', 'JOB1')
     
     candidate = next((c for c in candidates if c['id'] == candidate_id), None)
     if not candidate:
         return jsonify({'error': 'Candidate not found'}), 404
     
+    # Get job for context
+    job = next((j for j in jobs if j['id'] == job_id), jobs[0] if jobs else {})
+    job_title = job.get('title', 'the position') if job else 'the position'
+    
     # Use AI scorer
-    score = candidate_scorer.score_candidate(candidate, jobs[0] if jobs else {})
+    score = candidate_scorer.score_candidate(candidate, job)
     
     # Update candidate
     candidate['score'] = score['overall_score']
     candidate['category'] = score['category']
     candidate['skill_gaps'] = score.get('skill_gaps', [])
+    candidate['scored_at'] = datetime.now().isoformat()
+    
+    email_result = None
+    auto_rejected = False
+    
+    # AUTO-REJECTION: If score is below threshold, automatically reject and send email
+    if score['overall_score'] < AUTO_REJECT_THRESHOLD:
+        auto_rejected = True
+        candidate['status'] = 'Auto-Rejected'
+        candidate['rejection_reason'] = f"Score {score['overall_score']}% below threshold ({AUTO_REJECT_THRESHOLD}%)"
+        candidate['rejection_date'] = datetime.now().isoformat()
+        
+        # Generate AI rejection email
+        email_content = groq_rejection_email(
+            candidate_name=candidate.get('name', 'Candidate'),
+            job_title=job_title,
+            skills=candidate.get('skills', [])
+        )
+        
+        # Send rejection email via SendGrid
+        email_result = send_email(
+            to_email=candidate.get('email', ''),
+            subject=email_content.get('subject', f"Update on Your Application"),
+            html_content=email_content.get('html_body', email_content.get('body', ''))
+        )
+        
+        candidate['rejection_email_sent'] = email_result.get('success', False)
+        
+        print(f"[Auto-Reject] Candidate {candidate['name']} scored {score['overall_score']}% - REJECTED")
+    
+    # If score is good (>= 60%), send shortlist email
+    elif score['overall_score'] >= 75:
+        candidate['status'] = 'Shortlisted'
+        
+        # Generate AI shortlist email
+        email_content = generate_shortlisted_email(
+            candidate_name=candidate.get('name', 'Candidate'),
+            job_title=job_title
+        )
+        
+        # Send shortlist email
+        email_result = send_email(
+            to_email=candidate.get('email', ''),
+            subject=email_content.get('subject', f"Great News! You've Been Shortlisted"),
+            html_content=email_content.get('html_body', email_content.get('body', ''))
+        )
+        
+        print(f"[Shortlist] Candidate {candidate['name']} scored {score['overall_score']}% - SHORTLISTED")
+    
     save_json(CANDIDATES_FILE, candidates)
     
-    # Send email notification
-    integration_manager.send_grid.send_email(
-        to=candidate['email'],
-        subject='Screening Assessment Result',
-        template='screening_result',
-        data={'candidate_name': candidate['name'], 'score': score['overall_score'], 'category': score['category']}
-    )
-    
-    return jsonify(score), 200
+    return jsonify({
+        **score,
+        'auto_rejected': auto_rejected,
+        'email_sent': email_result.get('success', False) if email_result else False,
+        'status': candidate.get('status', 'Scored')
+    }), 200
 
 @app.route('/api/jobs/<job_id>/salary-recommendation', methods=['GET'])
 def get_salary_recommendation(job_id):
@@ -432,6 +833,18 @@ def get_interview_panel_recommendation(job_id):
     panel_recommendation = interview_panel_recommender.recommend_panel(job_requirements)
     
     return jsonify(panel_recommendation), 200
+
+
+@app.route('/api/jobs/<job_id>/assessment-recommendation', methods=['GET'])
+def get_assessment_recommendation(job_id):
+    """Get AI-recommended assessment for job"""
+    job = next((j for j in jobs if j['id'] == job_id), None)
+    if not job:
+        return jsonify({'error': 'Job not found'}), 404
+    
+    recommendation = assessment_recommender.recommend_assessment(job.get('title', 'General'))
+    return jsonify(recommendation), 200
+
 
 @app.route('/api/candidates/<candidate_id>/screening-summary', methods=['GET'])
 def get_screening_summary(candidate_id):

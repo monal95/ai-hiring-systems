@@ -346,7 +346,7 @@ const JobManagement = ({ onNavigate }) => {
             color: '#6b7280',
             textAlign: 'center'
           }}>
-            This will remove the job from LinkedIn, Indeed, Naukri, and all other platforms.
+            This will remove the job from LinkedIn, Company Portal, and all other platforms.
           </p>
         </div>
       )}

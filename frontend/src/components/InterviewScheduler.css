@@ -1,46 +1,50 @@
+/* ===== Interview Scheduler Container ===== */
 .interview-scheduler-container {
-  max-width: 800px;
+  max-width: 700px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 1.5rem;
 }
 
 .interview-back-button {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 24px;
-  padding: 10px 16px;
-  background-color: #6b7280;
-  color: white;
-  border: none;
-  border-radius: 8px;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--bg-light);
+  color: var(--text-medium);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s ease;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
 }
 
 .interview-back-button:hover {
-  background-color: #4b5563;
+  background-color: var(--border-color);
 }
 
+/* ===== Interview Card ===== */
 .interview-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  padding: 32px;
+  background: var(--bg-white);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
 }
 
 .interview-title {
-  font-size: 28px;
-  font-weight: bold;
-  color: #1f2937;
-  margin-bottom: 32px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 1.5rem;
 }
 
+/* ===== Interview Form ===== */
 .interview-form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 1.25rem;
 }
 
 .form-group {
@@ -49,117 +53,121 @@
 }
 
 .form-label {
-  font-size: 14px;
-  font-weight: 600;
-  color: #374151;
-  margin-bottom: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-medium);
+  margin-bottom: 0.5rem;
 }
 
 .form-select,
 .form-input,
 .form-textarea {
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 14px;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 0.875rem;
   font-family: inherit;
-  transition: all 0.3s ease;
-  background-color: white;
+  transition: border-color 0.2s;
+  background-color: var(--bg-white);
 }
 
 .form-select:focus,
 .form-input:focus,
 .form-textarea:focus {
   outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  border-color: var(--primary-color);
 }
 
 .form-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.25rem;
 }
 
-.interview-button-group {
-  display: flex;
-  gap: 12px;
-  margin-top: 24px;
-  justify-content: flex-end;
-}
-
-.btn-submit {
-  padding: 10px 24px;
-  background-color: #3498db;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 14px;
-  transition: background-color 0.3s ease;
-}
-
-.btn-submit:hover {
-  background-color: #2980b9;
-}
-
-.btn-cancel {
-  padding: 10px 24px;
-  background-color: #e5e7eb;
-  color: #374151;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 14px;
-  transition: all 0.3s ease;
-}
-
-.btn-cancel:hover {
-  background-color: #d1d5db;
-}
-
+/* ===== Interview Type Options ===== */
 .interview-type-options {
   display: flex;
-  gap: 12px;
+  gap: 0.75rem;
   flex-wrap: wrap;
 }
 
 .interview-type-option {
   flex: 1;
-  min-width: 120px;
+  min-width: 100px;
 }
 
+/* ===== Button Group ===== */
+.interview-button-group {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  justify-content: flex-end;
+}
+
+.btn-submit {
+  padding: 0.625rem 1.25rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: background 0.2s;
+}
+
+.btn-submit:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn-cancel {
+  padding: 0.625rem 1.25rem;
+  background-color: var(--bg-light);
+  color: var(--text-medium);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+  background-color: var(--border-color);
+}
+
+/* ===== Success Message ===== */
 .success-message {
-  background-color: #dcfce7;
-  border: 1px solid #86efac;
+  background-color: #ecfdf5;
+  border: 1px solid #a7f3d0;
   border-radius: 8px;
-  padding: 24px;
+  padding: 1.5rem;
   text-align: center;
   margin: 0 auto;
-  max-width: 800px;
+  max-width: 700px;
 }
 
 .success-title {
-  font-size: 22px;
-  font-weight: bold;
-  color: #166534;
-  margin-bottom: 8px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #065f46;
+  margin-bottom: 0.5rem;
 }
 
 .success-message p {
-  color: #15803d;
-  font-size: 14px;
+  color: #047857;
+  font-size: 0.875rem;
+  margin: 0;
 }
 
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
   .interview-scheduler-container {
-    padding: 12px;
+    padding: 1rem;
   }
 
   .interview-card {
-    padding: 16px;
+    padding: 1rem;
   }
 
   .form-row {
