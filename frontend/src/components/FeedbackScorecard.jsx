@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './CandidateList.css';
+import API_BASE_URL from '../config/api';
+import '../styles/CandidateList.css';
 
 const FeedbackScorecard = ({ candidateId, onBack, onSubmit }) => {
   const [candidate, setCandidate] = useState(null);
@@ -24,7 +25,7 @@ const FeedbackScorecard = ({ candidateId, onBack, onSubmit }) => {
 
   const fetchCandidate = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/candidates/${candidateId}`);
+      const response = await axios.get(`${API_BASE_URL}/api/candidates/${candidateId}`);
       setCandidate(response.data);
     } catch (error) {
       console.error('Error fetching candidate:', error);
@@ -70,7 +71,7 @@ const FeedbackScorecard = ({ candidateId, onBack, onSubmit }) => {
     setSubmitting(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/feedback', {
+      const response = await axios.post(`${API_BASE_URL}/api/feedback`, {
         candidate_id: candidateId,
         feedback: formData.feedback,
         scores: {

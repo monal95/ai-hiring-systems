@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './JobManagement.css';
+import API_BASE_URL from '../config/api';
+import '../styles/JobManagement.css';
 
 const JobManagement = ({ onNavigate }) => {
   const [jobs, setJobs] = useState([]);
@@ -14,7 +15,7 @@ const JobManagement = ({ onNavigate }) => {
 
   const fetchJobs = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/jobs');
+      const response = await axios.get(`${API_BASE_URL}/api/jobs`);
       setJobs(response.data);
     } catch (error) {
       console.error('Error fetching jobs:', error);
@@ -24,9 +25,9 @@ const JobManagement = ({ onNavigate }) => {
   };
 
   const handleRemoveJob = async (job) => {
-    if (window.confirm(`Are you sure you want to remove "${job.title}"? This will delete the job from all platforms (LinkedIn, Indeed, Naukri, etc.)`)) {
+    if (window.confirm(`Are you sure you want to remove "${job.title}"? This will delete the job from LinkedIn and Career Portal.`)) {
       try {
-        await axios.delete(`http://localhost:5000/api/jobs/${job.id}`);
+        await axios.delete(`${API_BASE_URL}/api/jobs/${job.id}`);
         alert('✅ Job removed successfully from dashboard and all platforms');
         setJobs(jobs.filter(j => j.id !== job.id));
         setSelectedJob(null);
@@ -147,7 +148,7 @@ const JobManagement = ({ onNavigate }) => {
                     <div style={{ backgroundColor: '#f9fafb', padding: '8px', borderRadius: '4px', textAlign: 'center' }}>
                       <div style={{ fontSize: '11px', color: '#6b7280' }}>Platforms</div>
                       <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#1f2937' }}>
-                        {job.platforms ? Object.keys(job.platforms).length : 0}
+                        2
                       </div>
                     </div>
                     <div style={{ backgroundColor: '#f9fafb', padding: '8px', borderRadius: '4px', textAlign: 'center' }}>
@@ -244,22 +245,30 @@ const JobManagement = ({ onNavigate }) => {
               Posted Platforms
             </h4>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-              {selectedJob.platforms && Object.keys(selectedJob.platforms).map(platform => (
-                <span
-                  key={platform}
-                  style={{
-                    backgroundColor: '#dbeafe',
-                    color: '#1e40af',
-                    padding: '4px 8px',
-                    borderRadius: '4px',
-                    fontSize: '11px',
-                    fontWeight: '600',
-                    textTransform: 'capitalize'
-                  }}
-                >
-                  {platform.replace('_', ' ')}
-                </span>
-              ))}
+              <span
+                style={{
+                  backgroundColor: '#dbeafe',
+                  color: '#1e40af',
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  fontSize: '11px',
+                  fontWeight: '600'
+                }}
+              >
+                LinkedIn
+              </span>
+              <span
+                style={{
+                  backgroundColor: '#d1fae5',
+                  color: '#065f46',
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  fontSize: '11px',
+                  fontWeight: '600'
+                }}
+              >
+                Career Portal
+              </span>
             </div>
           </div>
 
@@ -286,36 +295,25 @@ const JobManagement = ({ onNavigate }) => {
           </div>
 
           {/* Action Buttons */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+          <div style={{ marginBottom: '12px' }}>
             <button
               onClick={() => onNavigate('candidates-management')}
               style={{
-                padding: '10px 16px',
-                backgroundColor: '#3b82f6',
+                width: '100%',
+                padding: '12px 16px',
+                backgroundColor: '#004ef6ff',
                 color: 'white',
                 border: 'none',
                 borderRadius: '6px',
                 cursor: 'pointer',
                 fontWeight: '600',
-                fontSize: '13px'
+                fontSize: '14px',
+                transition: 'background-color 0.2s'
               }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#0039c7'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = '#004ef6ff'}
             >
               👥 View Candidates
-            </button>
-            <button
-              onClick={() => {/* Create new job */}}
-              style={{
-                padding: '10px 16px',
-                backgroundColor: '#10b981',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontWeight: '600',
-                fontSize: '13px'
-              }}
-            >
-              📊 Analytics
             </button>
           </div>
 
@@ -346,7 +344,7 @@ const JobManagement = ({ onNavigate }) => {
             color: '#6b7280',
             textAlign: 'center'
           }}>
-            This will remove the job from LinkedIn, Company Portal, and all other platforms.
+            This will remove the job from LinkedIn and Career Portal.
           </p>
         </div>
       )}

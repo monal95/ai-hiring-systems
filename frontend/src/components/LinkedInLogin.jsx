@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../config/api';
 
 const LinkedInLogin = ({ onLoginSuccess, onLogout }) => {
   const [isConnected, setIsConnected] = useState(false);
@@ -37,7 +38,7 @@ const LinkedInLogin = ({ onLoginSuccess, onLogout }) => {
     }
 
     try {
-      const response = await axios.get('http://localhost:5000/api/auth/linkedin/status', {
+      const response = await axios.get(`${API_BASE_URL}/api/auth/linkedin/status`, {
         headers: { 'X-LinkedIn-Session': sessionToken }
       });
       
@@ -59,7 +60,7 @@ const LinkedInLogin = ({ onLoginSuccess, onLogout }) => {
     setError(null);
 
     try {
-      const response = await axios.get('http://localhost:5000/api/auth/linkedin/login');
+      const response = await axios.get(`${API_BASE_URL}/api/auth/linkedin/login`);
       const { authorization_url, state } = response.data;
       
       // Store state for verification
@@ -78,7 +79,7 @@ const LinkedInLogin = ({ onLoginSuccess, onLogout }) => {
     setError(null);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/linkedin/callback', {
+      const response = await axios.post(`${API_BASE_URL}/api/auth/linkedin/callback`, {
         code,
         state
       });
@@ -105,7 +106,7 @@ const LinkedInLogin = ({ onLoginSuccess, onLogout }) => {
     const sessionToken = localStorage.getItem('linkedin_session');
     
     try {
-      await axios.post('http://localhost:5000/api/auth/linkedin/logout', {}, {
+      await axios.post(`${API_BASE_URL}/api/auth/linkedin/logout`, {}, {
         headers: { 'X-LinkedIn-Session': sessionToken }
       });
     } catch (err) {

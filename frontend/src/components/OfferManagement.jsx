@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './OfferManagement.css';
+import API_BASE_URL from '../config/api';
+import '../styles/OfferManagement.css';
 
 function OfferManagement({ onBack }) {
-  const [candidates, setCandidates] = useState([]);
+  const [allCandidates, setAllCandidates] = useState([]);
   const [offers, setOffers] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
+  const [sendingEmail, setSendingEmail] = useState(false);
   const [formData, setFormData] = useState({
     candidateId: '',
     salary: '',
     joining_date: '',
-    benefits: ''
+    position: '',
+    benefits: '',
+    additionalNotes: ''
   });
 
   useEffect(() => {
@@ -21,19 +25,19 @@ function OfferManagement({ onBack }) {
 
   const fetchData = async () => {
     try {
-      const [candidatesRes, offersRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/candidates?filter=ready_for_offer'),
-        axios.get('http://localhost:5000/api/candidates')
-      ]);
+      const candidatesRes = await axios.get(`${API_BASE_URL}/api/apply`);
       
-      const readyCandidates = offersRes.data.filter(c => 
-        c.status === 'Ready for Offer' || c.interview_score >= 70
-      );
-      setCandidates(readyCandidates);
+      // Get all candidates for manual selection
+      setAllCandidates(candidatesRes.data);
 
-      const offersData = offersRes.data
+      // Get candidates with existing offers
+      const offersData = candidatesRes.data
         .filter(c => c.offer)
-        .map(c => c.offer);
+        .map(c => ({
+          ...c.offer,
+          candidate_name: c.name,
+          candidate_email: c.email
+        }));
       setOffers(offersData);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -48,7 +52,7 @@ function OfferManagement({ onBack }) {
     }));
 
     if (name === 'candidateId') {
-      const candidate = candidates.find(c => c.id === value);
+      const candidate = allCandidates.find(c => c.id === value);
       setSelectedCandidate(candidate);
     }
   };
@@ -58,24 +62,50 @@ function OfferManagement({ onBack }) {
     setSubmitting(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/generate-offer', {
+      // Send offer letter via email
+      const response = await axios.post(`${API_BASE_URL}/api/send-offer-letter`, {
         candidate_id: formData.candidateId,
         salary: parseInt(formData.salary),
-        joining_date: formData.joining_date
+        joining_date: formData.joining_date,
+        position: formData.position || 'Software Developer',
+        benefits: formData.benefits,
+        additional_notes: formData.additionalNotes
       });
 
-      setOffers([...offers, response.data.offer]);
-      setShowForm(false);
-      setFormData({
-        candidateId: '',
-        salary: '',
-        joining_date: '',
-        benefits: ''
-      });
-      setSelectedCandidate(null);
+      if (response.data.success) {
+        alert(`✅ Offer letter sent successfully to ${selectedCandidate.email}!`);
+        
+        // Add to offers list
+        setOffers([...offers, {
+          id: Date.now(),
+          candidate_name: selectedCandidate.name,
+          candidate_email: selectedCandidate.email,
+          job_title: formData.position || 'Software Developer',
+          salary: parseInt(formData.salary),
+          joining_date: formData.joining_date,
+          status: 'Sent',
+          sent_at: new Date().toISOString()
+        }]);
+        
+        setShowForm(false);
+        setFormData({
+          candidateId: '',
+          salary: '',
+          joining_date: '',
+          position: '',
+          benefits: '',
+          additionalNotes: ''
+        });
+        setSelectedCandidate(null);
+        
+        // Refresh data
+        fetchData();
+      } else {
+        alert('Failed to send offer letter: ' + (response.data.error || 'Unknown error'));
+      }
     } catch (error) {
-      console.error('Error creating offer:', error);
-      alert('Failed to create offer');
+      console.error('Error sending offer:', error);
+      alert('Failed to send offer letter. Please check your email configuration.');
     } finally {
       setSubmitting(false);
     }
@@ -112,7 +142,7 @@ function OfferManagement({ onBack }) {
             padding: '24px',
             marginBottom: '24px'
           }}>
-            <h3 style={{ marginTop: 0, color: '#1e40af' }}>Generate Job Offer</h3>
+            <h3 style={{ marginTop: 0, color: '#1e40af' }}>📧 Send Offer Letter via Email</h3>
 
             <div className="form-group">
               <label className="form-label">
@@ -126,9 +156,9 @@ function OfferManagement({ onBack }) {
                 required
               >
                 <option value="">-- Choose a candidate --</option>
-                {candidates.map((candidate) => (
+                {allCandidates.map((candidate) => (
                   <option key={candidate.id} value={candidate.id}>
-                    {candidate.name} - {candidate.priority} Priority
+                    {candidate.name} ({candidate.email}) - {candidate.status || 'Applied'}
                   </option>
                 ))}
               </select>
@@ -142,27 +172,42 @@ function OfferManagement({ onBack }) {
                 padding: '16px',
                 marginBottom: '24px'
               }}>
-                <h4 style={{ margin: '0 0 12px 0', color: '#047857' }}>✓ Candidate Profile</h4>
+                <h4 style={{ margin: '0 0 12px 0', color: '#047857' }}>✓ Selected Candidate</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
+                  <div>
+                    <p style={{ margin: '0', color: '#666', fontSize: '12px' }}>Name</p>
+                    <p style={{ margin: '4px 0 0 0', fontWeight: '600' }}>{selectedCandidate.name}</p>
+                  </div>
                   <div>
                     <p style={{ margin: '0', color: '#666', fontSize: '12px' }}>Email</p>
                     <p style={{ margin: '4px 0 0 0', fontWeight: '600' }}>{selectedCandidate.email}</p>
                   </div>
                   <div>
                     <p style={{ margin: '0', color: '#666', fontSize: '12px' }}>Phone</p>
-                    <p style={{ margin: '4px 0 0 0', fontWeight: '600' }}>{selectedCandidate.phone}</p>
+                    <p style={{ margin: '4px 0 0 0', fontWeight: '600' }}>{selectedCandidate.phone || 'N/A'}</p>
                   </div>
                   <div>
-                    <p style={{ margin: '0', color: '#666', fontSize: '12px' }}>Match Score</p>
-                    <p style={{ margin: '4px 0 0 0', fontWeight: '600' }}>{selectedCandidate.match_score}%</p>
-                  </div>
-                  <div>
-                    <p style={{ margin: '0', color: '#666', fontSize: '12px' }}>Interview Score</p>
-                    <p style={{ margin: '4px 0 0 0', fontWeight: '600' }}>{selectedCandidate.interview_score || 'N/A'}</p>
+                    <p style={{ margin: '0', color: '#666', fontSize: '12px' }}>Status</p>
+                    <p style={{ margin: '4px 0 0 0', fontWeight: '600' }}>{selectedCandidate.status || 'Applied'}</p>
                   </div>
                 </div>
               </div>
             )}
+
+            <div className="form-group">
+              <label className="form-label">
+                Position/Job Title <span className="required">*</span>
+              </label>
+              <input
+                type="text"
+                name="position"
+                value={formData.position}
+                onChange={handleChange}
+                placeholder="e.g., Senior Software Engineer"
+                className="form-input"
+                required
+              />
+            </div>
 
             <div className="form-row">
               <div className="form-group">
@@ -196,6 +241,34 @@ function OfferManagement({ onBack }) {
               </div>
             </div>
 
+            <div className="form-group">
+              <label className="form-label">
+                Benefits Package
+              </label>
+              <textarea
+                name="benefits"
+                value={formData.benefits}
+                onChange={handleChange}
+                placeholder="e.g., Health insurance, 401k matching, 20 days PTO, Remote work options..."
+                className="form-input"
+                rows="3"
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">
+                Additional Notes
+              </label>
+              <textarea
+                name="additionalNotes"
+                value={formData.additionalNotes}
+                onChange={handleChange}
+                placeholder="Any additional information to include in the offer letter..."
+                className="form-input"
+                rows="2"
+              />
+            </div>
+
             <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
               <button 
                 type="submit" 
@@ -206,7 +279,32 @@ function OfferManagement({ onBack }) {
                   opacity: submitting ? 0.6 : 1
                 }}
               >
-                {submitting ? '⏳ Generating...' : '📄 Generate & Send Offer'}
+                {submitting ? '⏳ Sending...' : '📧 Send Offer Letter via Email'}
+              </button>
+              <button 
+                type="button" 
+                onClick={() => {
+                  setShowForm(false);
+                  setSelectedCandidate(null);
+                  setFormData({
+                    candidateId: '',
+                    salary: '',
+                    joining_date: '',
+                    position: '',
+                    benefits: '',
+                    additionalNotes: ''
+                  });
+                }}
+                style={{
+                  padding: '12px 24px',
+                  backgroundColor: '#6b7280',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer'
+                }}
+              >
+                Cancel
               </button>
             </div>
           </form>

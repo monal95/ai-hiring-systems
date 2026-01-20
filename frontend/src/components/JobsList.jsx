@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './Dashboard.css';
+import API_BASE_URL from '../config/api';
+import '../styles/Dashboard.css';
 
 const JobsList = ({ onNavigate, onSelectJob }) => {
   const [jobs, setJobs] = useState([]);
@@ -15,7 +16,7 @@ const JobsList = ({ onNavigate, onSelectJob }) => {
 
   const fetchJobs = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/jobs');
+      const response = await axios.get(`${API_BASE_URL}/api/jobs`);
       setJobs(response.data);
       setError(null);
       
@@ -33,7 +34,7 @@ const JobsList = ({ onNavigate, onSelectJob }) => {
 
   const fetchJobAnalytics = async (jobId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/jobs/${jobId}/analytics`);
+      const response = await axios.get(`${API_BASE_URL}/api/jobs/${jobId}/analytics`);
       setJobAnalytics(prev => ({
         ...prev,
         [jobId]: response.data
@@ -104,64 +105,6 @@ const JobsList = ({ onNavigate, onSelectJob }) => {
                   </div>
                 </div>
 
-                {selectedJobId === job.id && analytics && (
-                  <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #e5e7eb' }}>
-                    <h4 style={{ margin: '0 0 12px 0', color: '#374151', fontSize: '14px', fontWeight: '600' }}>
-                      Platform Performance
-                    </h4>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '12px', marginBottom: '16px' }}>
-                      <div style={{ backgroundColor: '#f3f4f6', padding: '12px', borderRadius: '6px', textAlign: 'center' }}>
-                        <div style={{ color: '#6b7280', fontSize: '12px' }}>Views</div>
-                        <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#1f2937' }}>
-                          {analytics.summary.total_views}
-                        </div>
-                      </div>
-                      <div style={{ backgroundColor: '#f3f4f6', padding: '12px', borderRadius: '6px', textAlign: 'center' }}>
-                        <div style={{ color: '#6b7280', fontSize: '12px' }}>Apps</div>
-                        <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#10b981' }}>
-                          {analytics.summary.total_applications}
-                        </div>
-                      </div>
-                      <div style={{ backgroundColor: '#f3f4f6', padding: '12px', borderRadius: '6px', textAlign: 'center' }}>
-                        <div style={{ color: '#6b7280', fontSize: '12px' }}>Ignored</div>
-                        <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#ef4444' }}>
-                          {analytics.summary.total_ignored}
-                        </div>
-                      </div>
-                      <div style={{ backgroundColor: '#f3f4f6', padding: '12px', borderRadius: '6px', textAlign: 'center' }}>
-                        <div style={{ color: '#6b7280', fontSize: '12px' }}>Conv.</div>
-                        <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#8b5cf6' }}>
-                          {analytics.summary.conversion_rate}%
-                        </div>
-                      </div>
-                    </div>
-
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: '12px' }}>
-                      {Object.entries(analytics.platforms).map(([platform, data]) => (
-                        <div
-                          key={platform}
-                          style={{
-                            backgroundColor: '#f9fafb',
-                            border: '1px solid #e5e7eb',
-                            borderRadius: '6px',
-                            padding: '12px',
-                            textAlign: 'center'
-                          }}
-                        >
-                          <div style={{ fontSize: '12px', fontWeight: '600', color: '#374151', marginBottom: '8px', textTransform: 'capitalize' }}>
-                            {platform.replace('_', ' ')}
-                          </div>
-                          <div style={{ fontSize: '11px', color: '#6b7280', marginBottom: '4px' }}>
-                            👁️ {data.views}
-                          </div>
-                          <div style={{ fontSize: '11px', color: '#10b981', fontWeight: '600' }}>
-                            📝 {data.applications}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
             );
           })

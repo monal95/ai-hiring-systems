@@ -113,7 +113,7 @@ const PrivacyPolicy = ({ onBack }) => {
       </div>
 
       <p style={{ marginTop: '32px', fontSize: '13px', color: '#94a3b8', textAlign: 'center' }}>
-        Last updated: December 2024
+        Last updated: December 2025
       </p>
     </div>
   );

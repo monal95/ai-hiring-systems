@@ -1,51 +1,42 @@
 {
   "jobs": [
     {
-      "title": "backend developer",
+      "title": "Flutter developer",
       "department": "Engineering",
       "location": "Bengaluru",
-      "experience_required": "5+ years",
-      "description": "We are seeking an experienced Backend Developer to join our team. As a Backend Developer, you will be responsible for designing, developing, and maintaining the server-side logic, database integration, and API connectivity of our applications. You will work collaboratively with our development team to identify and prioritize project requirements, and deliver high-quality solutions that meet our business needs. If you have a passion for building scalable, efficient, and reliable backend systems, and are looking for a new challenge, we want to hear from you.",
-      "must_have_skills": "Proficiency in programming languages such as Java, Python, or C#, Experience with database management systems such as MySQL or MongoDB, Knowledge of API design principles and RESTful APIs, Understanding of cloud-based platforms such as AWS or Azure, Familiarity with agile development methodologies such as Scrum or Kanban, Proficiency in programming languages such as Java, Python, or C#, Knowledge of message queues such as RabbitMQ or Apache Kafka",
-      "good_to_have_skills": "Experience with containerization using Docker, Knowledge of message queues such as RabbitMQ or Apache Kafka, Familiarity with testing frameworks such as JUnit or PyUnit",
+      "experience_required": "3+ years",
+      "description": "We are seeking a highly skilled and experienced Flutter developer to join our team. As a Flutter developer, you will be responsible for designing, developing, and maintaining mobile applications for Android and iOS using the Flutter framework. You will work closely with our cross-functional team to identify and prioritize project requirements, and deliver high-quality solutions that meet our customers' needs. If you have a passion for mobile app development, a strong understanding of software engineering principles, and excellent problem-solving skills, we want to hear from you.",
+      "must_have_skills": "Strong knowledge of Dart programming language, Experience with Flutter framework, Understanding of software engineering principles, Familiarity with Agile development methodologies, Excellent problem-solving skills",
+      "good_to_have_skills": "Experience with state management libraries such as Provider or Riverpod, Knowledge of Firebase or other cloud-based services, Familiarity with CI/CD pipelines and automated testing",
       "selected_platforms": [
         "company_portal",
-        "linkedin",
-        "indeed",
-        "naukri",
-        "internal_referral"
+        "linkedin"
       ],
       "requirements": {
         "must_have": [
-          "Proficiency in programming languages such as Java",
-          "Python",
-          "or C#",
-          "Experience with database management systems such as MySQL or MongoDB",
-          "Knowledge of API design principles and RESTful APIs",
-          "Understanding of cloud-based platforms such as AWS or Azure",
-          "Familiarity with agile development methodologies such as Scrum or Kanban",
-          "Proficiency in programming languages such as Java",
-          "Python",
-          "or C#",
-          "Knowledge of message queues such as RabbitMQ or Apache Kafka"
+          "Strong knowledge of Dart programming language",
+          "Experience with Flutter framework",
+          "Understanding of software engineering principles",
+          "Familiarity with Agile development methodologies",
+          "Excellent problem-solving skills"
         ],
         "good_to_have": [
-          "Experience with containerization using Docker",
-          "Knowledge of message queues such as RabbitMQ or Apache Kafka",
-          "Familiarity with testing frameworks such as JUnit or PyUnit"
+          "Experience with state management libraries such as Provider or Riverpod",
+          "Knowledge of Firebase or other cloud-based services",
+          "Familiarity with CI/CD pipelines and automated testing"
         ]
       },
       "id": "JOB1",
-      "created_at": "2025-12-24T10:01:41.645043",
+      "created_at": "2026-01-05T23:30:54.748165",
       "status": "active",
-      "applications": 0,
+      "applications": 1,
       "openings": 5,
       "hired_count": 0,
-      "ai_generated_message": "\n\ud83d\ude80 Now Hiring: backend developer\n\n\ud83d\udccd Location: Bengaluru\n\ud83c\udfaf Openings: 5\n\nWe are seeking an experienced Backend Developer to join our team. As a Backend Developer, you will be responsible for designing, developing, and maintaining the server-side logic, database integration, and API connectivity of our applications. You will work collaboratively with our development team to identify and prioritize project requirements, and deliver high-quality solutions that meet our business needs. If you have a passion for building scalable, efficient, and reliable backend systems, and are looking for a new challenge, we want to hear from you.\n\n\u2705 Must-Have Skills:\n  \u2022 Proficiency in programming languages such as Java\n  \u2022 Python\n  \u2022 or C#\n  \u2022 Experience with database management systems such as MySQL or MongoDB\n  \u2022 Knowledge of API design principles and RESTful APIs\n\n\ud83d\udca1 Nice-to-Have Skills:\n  \u2022 Experience with containerization using Docker\n  \u2022 Knowledge of message queues such as RabbitMQ or Apache Kafka\n  \u2022 Familiarity with testing frameworks such as JUnit or PyUnit\n\n\ud83d\udd17 Apply Now via the link below!\n#Hiring #JobOpening #Careers",
+      "ai_generated_message": "\n\ud83d\ude80 Now Hiring: Flutter developer\n\n\ud83d\udccd Location: Bengaluru\n\ud83c\udfaf Openings: 5\n\nWe are seeking a highly skilled and experienced Flutter developer to join our team. As a Flutter developer, you will be responsible for designing, developing, and maintaining mobile applications for Android and iOS using the Flutter framework. You will work closely with our cross-functional team to identify and prioritize project requirements, and deliver high-quality solutions that meet our customers' needs. If you have a passion for mobile app development, a strong understanding of software engineering principles, and excellent problem-solving skills, we want to hear from you.\n\n\u2705 Must-Have Skills:\n  \u2022 Strong knowledge of Dart programming language\n  \u2022 Experience with Flutter framework\n  \u2022 Understanding of software engineering principles\n  \u2022 Familiarity with Agile development methodologies\n  \u2022 Excellent problem-solving skills\n\n\ud83d\udca1 Nice-to-Have Skills:\n  \u2022 Experience with state management libraries such as Provider or Riverpod\n  \u2022 Knowledge of Firebase or other cloud-based services\n  \u2022 Familiarity with CI/CD pipelines and automated testing\n\n\ud83d\udd17 Apply Now via the link below!\n#Hiring #JobOpening #Careers",
       "platforms": {
         "company_portal": {
           "status": "published",
-          "published_at": "2025-12-24T10:01:41.645130",
+          "published_at": "2026-01-05T23:30:54.748253",
           "views": 0,
           "clicks": 0,
           "applications": 0,
@@ -55,141 +46,13 @@
         },
         "linkedin": {
           "status": "published",
-          "published_at": "2025-12-24T10:01:41.647666",
+          "published_at": "2026-01-05T23:30:54.750958",
           "views": 0,
           "clicks": 0,
           "applications": 0,
           "ignored": 0,
           "url": "https://linkedin.com/jobs/JOB1",
           "post_id": "linkedin_JOB1"
-        },
-        "indeed": {
-          "status": "published",
-          "published_at": "2025-12-24T10:01:41.647732",
-          "views": 0,
-          "clicks": 0,
-          "applications": 0,
-          "ignored": 0,
-          "url": "https://indeed.com/jobs/JOB1",
-          "post_id": "indeed_JOB1"
-        },
-        "naukri": {
-          "status": "published",
-          "published_at": "2025-12-24T10:01:41.647754",
-          "views": 0,
-          "clicks": 0,
-          "applications": 0,
-          "ignored": 0,
-          "url": "https://naukri.com/jobs/JOB1",
-          "post_id": "naukri_JOB1"
-        },
-        "internal_referral": {
-          "status": "published",
-          "published_at": "2025-12-24T10:01:41.647768",
-          "views": 0,
-          "clicks": 0,
-          "applications": 0,
-          "ignored": 0,
-          "url": "https://internal_referral.com/jobs/JOB1",
-          "post_id": "internal_referral_JOB1"
-        }
-      }
-    },
-    {
-      "title": "frontend developer",
-      "department": "Engineering",
-      "location": "Bengaluru",
-      "experience_required": "3+ years",
-      "description": "We are seeking a highly skilled Frontend Developer to join our team, working remotely to design and develop innovative, user-friendly, and responsive web applications. As a key member of our development team, you will be responsible for translating business requirements into technical solutions, collaborating with cross-functional teams to identify and prioritize project requirements, and ensuring the highest quality of deliverables. If you have a passion for creating exceptional user experiences, are proficient in the latest frontend technologies, and thrive in a fast-paced environment, we encourage you to apply for this exciting opportunity.",
-      "must_have_skills": "Proficiency in HTML, CSS, JavaScript, and CSS preprocessors such as Sass or Less, Experience with modern frontend frameworks such as React, Angular, or Vue.js, Strong understanding of responsive web design, CSS grids, and flexbox, Familiarity with version control systems, particularly Git, Excellent problem-solving skills, with the ability to debug and optimize code",
-      "good_to_have_skills": "Experience with state management libraries such as Redux or MobX, Knowledge of web performance optimization techniques and tools, Familiarity with agile development methodologies and project management tools such as Jira or Asana",
-      "selected_platforms": [
-        "company_portal",
-        "linkedin",
-        "indeed",
-        "naukri",
-        "internal_referral"
-      ],
-      "requirements": {
-        "must_have": [
-          "Proficiency in HTML",
-          "CSS",
-          "JavaScript",
-          "and CSS preprocessors such as Sass or Less",
-          "Experience with modern frontend frameworks such as React",
-          "Angular",
-          "or Vue.js",
-          "Strong understanding of responsive web design",
-          "CSS grids",
-          "and flexbox",
-          "Familiarity with version control systems",
-          "particularly Git",
-          "Excellent problem-solving skills",
-          "with the ability to debug and optimize code"
-        ],
-        "good_to_have": [
-          "Experience with state management libraries such as Redux or MobX",
-          "Knowledge of web performance optimization techniques and tools",
-          "Familiarity with agile development methodologies and project management tools such as Jira or Asana"
-        ]
-      },
-      "id": "JOB2",
-      "created_at": "2025-12-24T10:05:58.523590",
-      "status": "active",
-      "applications": 1,
-      "openings": 5,
-      "hired_count": 0,
-      "ai_generated_message": "\n\ud83d\ude80 Now Hiring: frontend developer\n\n\ud83d\udccd Location: Bengaluru\n\ud83c\udfaf Openings: 5\n\nWe are seeking a highly skilled Frontend Developer to join our team, working remotely to design and develop innovative, user-friendly, and responsive web applications. As a key member of our development team, you will be responsible for translating business requirements into technical solutions, collaborating with cross-functional teams to identify and prioritize project requirements, and ensuring the highest quality of deliverables. If you have a passion for creating exceptional user experiences, are proficient in the latest frontend technologies, and thrive in a fast-paced environment, we encourage you to apply for this exciting opportunity.\n\n\u2705 Must-Have Skills:\n  \u2022 Proficiency in HTML\n  \u2022 CSS\n  \u2022 JavaScript\n  \u2022 and CSS preprocessors such as Sass or Less\n  \u2022 Experience with modern frontend frameworks such as React\n\n\ud83d\udca1 Nice-to-Have Skills:\n  \u2022 Experience with state management libraries such as Redux or MobX\n  \u2022 Knowledge of web performance optimization techniques and tools\n  \u2022 Familiarity with agile development methodologies and project management tools such as Jira or Asana\n\n\ud83d\udd17 Apply Now via the link below!\n#Hiring #JobOpening #Careers",
-      "platforms": {
-        "company_portal": {
-          "status": "published",
-          "published_at": "2025-12-24T10:05:58.523682",
-          "views": 0,
-          "clicks": 0,
-          "applications": 0,
-          "ignored": 0,
-          "url": "https://company_portal.com/jobs/JOB2",
-          "post_id": "company_portal_JOB2"
-        },
-        "linkedin": {
-          "status": "published",
-          "published_at": "2025-12-24T10:05:58.523726",
-          "views": 0,
-          "clicks": 0,
-          "applications": 0,
-          "ignored": 0,
-          "url": "https://linkedin.com/jobs/JOB2",
-          "post_id": "linkedin_JOB2"
-        },
-        "indeed": {
-          "status": "published",
-          "published_at": "2025-12-24T10:05:58.523758",
-          "views": 0,
-          "clicks": 0,
-          "applications": 0,
-          "ignored": 0,
-          "url": "https://indeed.com/jobs/JOB2",
-          "post_id": "indeed_JOB2"
-        },
-        "naukri": {
-          "status": "published",
-          "published_at": "2025-12-24T10:05:58.523774",
-          "views": 0,
-          "clicks": 0,
-          "applications": 0,
-          "ignored": 0,
-          "url": "https://naukri.com/jobs/JOB2",
-          "post_id": "naukri_JOB2"
-        },
-        "internal_referral": {
-          "status": "published",
-          "published_at": "2025-12-24T10:05:58.523787",
-          "views": 0,
-          "clicks": 0,
-          "applications": 0,
-          "ignored": 0,
-          "url": "https://internal_referral.com/jobs/JOB2",
-          "post_id": "internal_referral_JOB2"
         }
       }
     }

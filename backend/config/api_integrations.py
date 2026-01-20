@@ -365,32 +365,72 @@ class SendGridAPI(EmailServiceAPI):
     """SendGrid Email API"""
     
     def __init__(self):
-        self.api_key = os.getenv('SENDGRID_API_KEY', 'demo-key')
+        self.api_key = os.getenv('SENDGRID_API_KEY', '')
         self.from_email = os.getenv('FROM_EMAIL', 'noreply@company.com')
+        
+        # Import SendGrid here to avoid issues if not installed
+        try:
+            from sendgrid import SendGridAPIClient
+            from sendgrid.helpers.mail import Mail
+            self.SendGridAPIClient = SendGridAPIClient
+            self.Mail = Mail
+            self.sendgrid_available = True
+        except ImportError:
+            print("[SendGridAPI] Warning: SendGrid library not installed. Using mock mode.")
+            self.sendgrid_available = False
     
     def send_email(self, to: str, subject: str, body: str, html: bool = False) -> Dict:
         """Send email via SendGrid"""
         try:
-            headers = {
-                'Authorization': f'Bearer {self.api_key}',
-                'Content-Type': 'application/json'
-            }
+            print(f"[SendGridAPI] Attempting to send email to: {to}")
+            print(f"[SendGridAPI] Subject: {subject}")
             
-            payload = {
-                'personalizations': [{'to': [{'email': to}]}],
-                'from': {'email': self.from_email},
-                'subject': subject,
-                'content': [{'type': 'text/html' if html else 'text/plain', 'value': body}]
-            }
+            if not self.sendgrid_available:
+                print("[SendGridAPI] Warning: SendGrid not available, returning mock response")
+                return {
+                    'success': True,
+                    'message_id': f"MOCK{int(datetime.now().timestamp()*1000)}",
+                    'status': 'sent',
+                    'note': 'Mock response - configure SendGrid API key'
+                }
             
-            # Mock response
+            if not self.api_key:
+                print("[SendGridAPI] Warning: SENDGRID_API_KEY not configured")
+                return {
+                    'success': False,
+                    'error': 'SENDGRID_API_KEY not configured',
+                    'message': 'Email sending not configured'
+                }
+            
+            # Create and send email using actual SendGrid API
+            message = self.Mail(
+                from_email=self.from_email,
+                to_emails=to,
+                subject=subject,
+                html_content=body if html else None,
+                plain_text_content=body if not html else None
+            )
+            
+            sg = self.SendGridAPIClient(self.api_key)
+            response = sg.send(message)
+            
+            print(f"[SendGridAPI] SUCCESS! Status code: {response.status_code}")
+            
             return {
-                'success': True,
-                'message_id': f"SG{datetime.now().timestamp()}",
-                'status': 'sent'
+                'success': response.status_code in [200, 201, 202],
+                'message_id': response.headers.get('X-Message-Id', ''),
+                'status': 'sent',
+                'status_code': response.status_code
             }
         except Exception as e:
-            return {'success': False, 'error': str(e)}
+            error_msg = str(e)
+            print(f"[SendGridAPI] ERROR: {error_msg}")
+            
+            return {
+                'success': False,
+                'error': error_msg,
+                'message': f'Failed to send email to {to}'
+            }
 
 
 class TwilioAPI:
@@ -557,8 +597,7 @@ class IntegrationManager:
     def __init__(self):
         # Job Board APIs
         self.linkedin = LinkedInAPI()
-        self.indeed = IndeedAPI()
-        self.naukri = NaukriAPI()
+        
         
         # Calendar APIs
         self.google_calendar = GoogleCalendarAPI()

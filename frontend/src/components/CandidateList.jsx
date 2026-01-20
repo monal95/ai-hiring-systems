@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './CandidateList.css';
+import API_BASE_URL from '../config/api';
+import '../styles/CandidateList.css';
 
 const CandidateList = ({ jobId, onSchedule }) => {
   const [jobs, setJobs] = useState([]);
@@ -26,7 +27,7 @@ const CandidateList = ({ jobId, onSchedule }) => {
 
   const fetchJobs = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/jobs');
+      const response = await axios.get(`${API_BASE_URL}/api/jobs`);
       setJobs(response.data);
 
       if (response.data.length > 0) {
@@ -40,7 +41,7 @@ const CandidateList = ({ jobId, onSchedule }) => {
   const fetchCandidates = async (jobId) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/candidates?job_id=${jobId}`
+        `${API_BASE_URL}/api/candidates?job_id=${jobId}`
       );
       setCandidates(response.data);
     } catch (error) {
@@ -73,7 +74,7 @@ const CandidateList = ({ jobId, onSchedule }) => {
     formData.append('phone', applicationForm.phone);
 
     try {
-      await axios.post('http://localhost:5000/api/apply', formData, {
+      await axios.post(`${API_BASE_URL}/api/apply`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './InterviewScheduler.css';
+import API_BASE_URL from '../config/api';
+import '../styles/InterviewScheduler.css';
 
 function InterviewScheduler({ onBack }) {
   const [candidates, setCandidates] = useState([]);
@@ -25,7 +26,7 @@ function InterviewScheduler({ onBack }) {
 
   const fetchCandidates = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/candidates');
+      const response = await axios.get(`${API_BASE_URL}/api/candidates`);
       setCandidates(response.data.filter(c => c.status !== 'Rejected'));
     } catch (err) {
       console.error('Error fetching candidates:', err);
@@ -71,7 +72,7 @@ function InterviewScheduler({ onBack }) {
     setError(null);
 
     try {
-      await axios.post('http://localhost:5000/api/schedule-interview', {
+      await axios.post(`${API_BASE_URL}/api/schedule-interview`, {
         candidate_id: formData.candidateId,
         slots: [`${formData.interviewDate}T${formData.interviewTime}`],
         interviewers: formData.interviewers

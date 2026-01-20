@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './CandidateManagement.css';
+import API_BASE_URL from '../config/api';
+import '../styles/CandidateManagement.css';
 
 const CandidateManagement = ({ onNavigate }) => {
   const [candidates, setCandidates] = useState([]);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('screening');
-  const [salaryRec, setSalaryRec] = useState(null);
+  const [activeTab, setActiveTab] = useState('details');
   const [panelRec, setPanelRec] = useState(null);
   const [assessmentRec, setAssessmentRec] = useState(null);
+  const [interviewScores, setInterviewScores] = useState(null);
 
   const jobId = 'JOB1'; // Using first job
 
@@ -19,7 +20,7 @@ const CandidateManagement = ({ onNavigate }) => {
 
   const fetchCandidates = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/apply');
+      const response = await axios.get(`${API_BASE_URL}/api/apply`);
       setCandidates(response.data);
       if (response.data.length > 0) {
         setSelectedCandidate(response.data[0]);
@@ -34,17 +35,29 @@ const CandidateManagement = ({ onNavigate }) => {
 
   const loadCandidateDetails = async (candidateId) => {
     try {
-      // Load salary recommendation
-      const salaryRes = await axios.get(`http://localhost:5000/api/jobs/${jobId}/salary-recommendation`);
-      setSalaryRec(salaryRes.data);
+      // Load interview panel recommendation (optional - may not exist)
+      try {
+        const panelRes = await axios.get(`${API_BASE_URL}/api/jobs/${jobId}/interview-panel`);
+        setPanelRec(panelRes.data);
+      } catch (err) {
+        setPanelRec(null);
+      }
 
-      // Load interview panel recommendation
-      const panelRes = await axios.get(`http://localhost:5000/api/jobs/${jobId}/interview-panel`);
-      setPanelRec(panelRes.data);
+      // Load assessment recommendation (optional - may not exist)
+      try {
+        const assessmentRes = await axios.get(`${API_BASE_URL}/api/jobs/${jobId}/assessment-recommendation`);
+        setAssessmentRec(assessmentRes.data);
+      } catch (err) {
+        setAssessmentRec(null);
+      }
 
-      // Load assessment recommendation
-      const assessmentRes = await axios.get(`http://localhost:5000/api/jobs/${jobId}/assessment-recommendation`);
-      setAssessmentRec(assessmentRes.data);
+      // Load interview scores for this candidate (optional - may not have completed interview)
+      try {
+        const scoresRes = await axios.get(`${API_BASE_URL}/api/candidates/${candidateId}/interview-scores`);
+        setInterviewScores(scoresRes.data);
+      } catch (err) {
+        setInterviewScores(null);
+      }
     } catch (error) {
       console.error('Error loading details:', error);
     }
@@ -53,7 +66,7 @@ const CandidateManagement = ({ onNavigate }) => {
   const handleScoreCandidate = async (candidate) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/candidates/${candidate.id}/score?job_id=${jobId}`
+        `${API_BASE_URL}/api/candidates/${candidate.id}/score?job_id=${jobId}`
       );
       
       // Update candidate with score
@@ -71,7 +84,7 @@ const CandidateManagement = ({ onNavigate }) => {
   const handleAssignAssessment = async (candidate) => {
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/candidates/${candidate.id}/assessment`,
+        `${API_BASE_URL}/api/candidates/${candidate.id}/assessment`,
         { job_id: jobId }
       );
       alert('Assessment assigned! Email sent to candidate.');
@@ -84,7 +97,7 @@ const CandidateManagement = ({ onNavigate }) => {
   const handleScheduleInterview = async (candidate) => {
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/candidates/${candidate.id}/interview/schedule`,
+        `${API_BASE_URL}/api/candidates/${candidate.id}/interview/schedule`,
         { job_id: jobId, calendar_provider: 'google' }
       );
       alert(`Interview scheduled for ${response.data.scheduled_time}`);
@@ -97,48 +110,13 @@ const CandidateManagement = ({ onNavigate }) => {
   const handleSubmitFeedback = async (candidate, feedback) => {
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/candidates/${candidate.id}/interview/feedback`,
+        `${API_BASE_URL}/api/candidates/${candidate.id}/interview/feedback`,
         feedback
       );
       alert('Feedback submitted successfully!');
       setSelectedCandidate({ ...candidate, interview_feedback: response.data });
     } catch (error) {
       console.error('Error submitting feedback:', error);
-    }
-  };
-
-  const handleGenerateOffer = async (candidate) => {
-    try {
-      const response = await axios.post(
-        `http://localhost:5000/api/candidates/${candidate.id}/offer`,
-        {
-          job_id: jobId,
-          salary: salaryRec?.suggested || 22,
-          joining_date: new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0]
-        }
-      );
-      alert('Offer sent for signature! Link sent to candidate.');
-      setSelectedCandidate({ ...candidate, offer: response.data });
-    } catch (error) {
-      console.error('Error generating offer:', error);
-    }
-  };
-
-  const handleStartOnboarding = async (candidate) => {
-    try {
-      const response = await axios.post(
-        `http://localhost:5000/api/candidates/${candidate.id}/onboarding`,
-        {
-          position: 'Senior Python Developer',
-          department: 'Engineering',
-          joining_date: new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0],
-          salary: salaryRec?.suggested || 22
-        }
-      );
-      alert('Onboarding started! Welcome email sent.');
-      setSelectedCandidate({ ...candidate, onboarding: response.data });
-    } catch (error) {
-      console.error('Error starting onboarding:', error);
     }
   };
 
@@ -151,7 +129,7 @@ const CandidateManagement = ({ onNavigate }) => {
 
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/candidates/${candidate.id}`,
+        `${API_BASE_URL}/api/candidates/${candidate.id}`,
         {
           data: { 
             reason: reason,
@@ -189,7 +167,7 @@ const CandidateManagement = ({ onNavigate }) => {
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/candidates/${candidate.id}/send-rejection`,
+        `${API_BASE_URL}/api/candidates/${candidate.id}/send-rejection`,
         { reason }
       );
       
@@ -325,7 +303,7 @@ const CandidateManagement = ({ onNavigate }) => {
 
             {/* Tabs */}
             <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', borderBottom: '2px solid #e5e7eb' }}>
-              {['screening', 'assessment', 'interview', 'offer', 'onboarding'].map(tab => (
+              {['details', 'screening', 'assessment', 'interview'].map(tab => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
@@ -339,11 +317,172 @@ const CandidateManagement = ({ onNavigate }) => {
                     textTransform: 'capitalize'
                   }}
                 >
-                  {tab === 'assessment' && '📝'} {tab === 'interview' && '🎤'} {tab === 'offer' && '📄'} {tab === 'onboarding' && '🚀'} {tab === 'screening' && '🔍'}
+                  {tab === 'details' && '👤'} {tab === 'assessment' && '📝'} {tab === 'interview' && '🎤'} {tab === 'screening' && '🔍'}
                   {' '}{tab}
                 </button>
               ))}
             </div>
+
+            {/* Candidate Details Tab */}
+            {activeTab === 'details' && (
+              <div>
+                <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '20px', marginBottom: '20px' }}>
+                  <h3 style={{ margin: '0 0 16px 0', color: '#1f2937' }}>👤 Candidate Information</h3>
+                  
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
+                    {/* Personal Information */}
+                    <div style={{ backgroundColor: '#f3f4f6', padding: '16px', borderRadius: '8px' }}>
+                      <h4 style={{ margin: '0 0 12px 0', color: '#374151' }}>📋 Personal Details</h4>
+                      <div style={{ fontSize: '14px', color: '#1f2937' }}>
+                        <p><strong>Name:</strong> {selectedCandidate.name}</p>
+                        <p><strong>Email:</strong> {selectedCandidate.email}</p>
+                        <p><strong>Phone:</strong> {selectedCandidate.phone || 'Not provided'}</p>
+                        <p><strong>Applied:</strong> {selectedCandidate.applied_at ? new Date(selectedCandidate.applied_at).toLocaleDateString() : 'N/A'}</p>
+                      </div>
+                    </div>
+
+                    {/* Skills */}
+                    <div style={{ backgroundColor: '#f3f4f6', padding: '16px', borderRadius: '8px' }}>
+                      <h4 style={{ margin: '0 0 12px 0', color: '#374151' }}>🔧 Skills</h4>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                        {selectedCandidate.skills && selectedCandidate.skills.length > 0 ? (
+                          selectedCandidate.skills.map((skill, idx) => (
+                            <span key={idx} style={{
+                              padding: '4px 12px',
+                              backgroundColor: '#dbeafe',
+                              color: '#1e40af',
+                              borderRadius: '20px',
+                              fontSize: '12px',
+                              fontWeight: '500'
+                            }}>
+                              {skill}
+                            </span>
+                          ))
+                        ) : (
+                          <span style={{ color: '#6b7280' }}>No skills listed</span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Experience */}
+                    <div style={{ backgroundColor: '#f3f4f6', padding: '16px', borderRadius: '8px' }}>
+                      <h4 style={{ margin: '0 0 12px 0', color: '#374151' }}>💼 Experience</h4>
+                      <div style={{ fontSize: '14px', color: '#1f2937' }}>
+                        <p><strong>Years of Experience:</strong> {selectedCandidate.experience_years || 'Not specified'}</p>
+                        <p><strong>Current Role:</strong> {selectedCandidate.current_role || 'Not specified'}</p>
+                        <p><strong>Expected Salary:</strong> {selectedCandidate.expected_salary || 'Not specified'}</p>
+                      </div>
+                    </div>
+
+                    {/* Education */}
+                    <div style={{ backgroundColor: '#f3f4f6', padding: '16px', borderRadius: '8px' }}>
+                      <h4 style={{ margin: '0 0 12px 0', color: '#374151' }}>🎓 Education</h4>
+                      <div style={{ fontSize: '14px', color: '#1f2937' }}>
+                        <p><strong>Degree:</strong> {selectedCandidate.education?.degree || selectedCandidate.degree || 'Not specified'}</p>
+                        <p><strong>University:</strong> {selectedCandidate.education?.university || selectedCandidate.university || 'Not specified'}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Cover Letter / Notes */}
+                  {selectedCandidate.cover_letter && (
+                    <div style={{ marginTop: '20px', backgroundColor: '#fef3c7', padding: '16px', borderRadius: '8px' }}>
+                      <h4 style={{ margin: '0 0 8px 0', color: '#92400e' }}>📝 Cover Letter / Notes</h4>
+                      <p style={{ margin: 0, color: '#78350f', fontSize: '14px', lineHeight: '1.6' }}>
+                        {selectedCandidate.cover_letter}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Interview Performance Section */}
+                {interviewScores && (
+                  <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '20px' }}>
+                    <h3 style={{ margin: '0 0 16px 0', color: '#1f2937' }}>📊 Interview Performance</h3>
+                    
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '20px' }}>
+                      <div style={{ 
+                        backgroundColor: interviewScores.overall_score >= 80 ? '#d1fae5' : interviewScores.overall_score >= 60 ? '#fef3c7' : '#fee2e2', 
+                        padding: '16px', 
+                        borderRadius: '8px', 
+                        textAlign: 'center' 
+                      }}>
+                        <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>Overall Score</div>
+                        <div style={{ 
+                          fontSize: '28px', 
+                          fontWeight: 'bold', 
+                          color: interviewScores.overall_score >= 80 ? '#065f46' : interviewScores.overall_score >= 60 ? '#92400e' : '#7f1d1d'
+                        }}>
+                          {interviewScores.overall_score}%
+                        </div>
+                      </div>
+                      
+                      <div style={{ backgroundColor: '#dbeafe', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
+                        <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>Technical</div>
+                        <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#1e40af' }}>
+                          {interviewScores.technical_score || 0}%
+                        </div>
+                      </div>
+                      
+                      <div style={{ backgroundColor: '#e0e7ff', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
+                        <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>Behavioral</div>
+                        <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#4338ca' }}>
+                          {interviewScores.behavioral_score || 0}%
+                        </div>
+                      </div>
+                      
+                      <div style={{ backgroundColor: '#f3e8ff', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
+                        <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>Coding</div>
+                        <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#7c3aed' }}>
+                          {interviewScores.coding_score || 0}%
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Status Indicator */}
+                    <div style={{
+                      padding: '12px 16px',
+                      borderRadius: '8px',
+                      backgroundColor: interviewScores.overall_score >= 80 ? '#d1fae5' : '#fee2e2',
+                      border: `1px solid ${interviewScores.overall_score >= 80 ? '#86efac' : '#fca5a5'}`,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px'
+                    }}>
+                      <span style={{ fontSize: '20px' }}>{interviewScores.overall_score >= 80 ? '✅' : '❌'}</span>
+                      <span style={{ 
+                        fontWeight: '600', 
+                        color: interviewScores.overall_score >= 80 ? '#065f46' : '#7f1d1d'
+                      }}>
+                        {interviewScores.overall_score >= 80 
+                          ? 'Qualified for HR Interview - Invitation Sent' 
+                          : 'Did Not Meet Threshold - Rejection Email Sent'}
+                      </span>
+                    </div>
+
+                    {/* AI Feedback */}
+                    {interviewScores.ai_feedback && (
+                      <div style={{ marginTop: '16px', backgroundColor: '#f3f4f6', padding: '16px', borderRadius: '8px' }}>
+                        <h4 style={{ margin: '0 0 8px 0', color: '#374151' }}>🤖 AI Evaluation Feedback</h4>
+                        <p style={{ margin: 0, color: '#1f2937', fontSize: '14px', lineHeight: '1.6' }}>
+                          {interviewScores.ai_feedback}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {!interviewScores && (
+                  <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '20px' }}>
+                    <h3 style={{ margin: '0 0 16px 0', color: '#1f2937' }}>📊 Interview Performance</h3>
+                    <div style={{ textAlign: 'center', padding: '24px', color: '#6b7280' }}>
+                      <p>No interview scores available yet.</p>
+                      <p style={{ fontSize: '14px' }}>Interview scores will appear here after the candidate completes their interview session.</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Screening Tab */}
             {activeTab === 'screening' && (
@@ -367,18 +506,6 @@ const CandidateManagement = ({ onNavigate }) => {
                         </div>
                       </div>
                     </div>
-                  </div>
-
-                  <div style={{ marginBottom: '20px' }}>
-                    <h4 style={{ color: '#374151', marginBottom: '12px' }}>💰 Salary Recommendation</h4>
-                    {salaryRec && (
-                      <div style={{ backgroundColor: '#f0fdf4', border: '1px solid #86efac', borderRadius: '6px', padding: '12px' }}>
-                        <div style={{ fontWeight: '600', color: '#15803d' }}>{salaryRec.market_range}</div>
-                        <div style={{ fontSize: '12px', color: '#16a34a', marginTop: '4px' }}>
-                          Suggested: <strong>{salaryRec.suggested_salary}</strong>
-                        </div>
-                      </div>
-                    )}
                   </div>
 
                   <button
@@ -518,91 +645,6 @@ const CandidateManagement = ({ onNavigate }) => {
                     <div style={{ fontSize: '13px', color: '#1e3a8a', marginTop: '4px' }}>
                       Time: {selectedCandidate.interview.scheduled_time}
                     </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Offer Tab */}
-            {activeTab === 'offer' && (
-              <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '20px' }}>
-                <h3 style={{ margin: '0 0 16px 0', color: '#1f2937' }}>📄 Offer Management</h3>
-                
-                {salaryRec && (
-                  <div style={{ backgroundColor: '#f0fdf4', border: '1px solid #86efac', borderRadius: '6px', padding: '12px', marginBottom: '20px' }}>
-                    <div style={{ fontWeight: '600', color: '#15803d' }}>Salary Recommendation</div>
-                    <div style={{ fontSize: '14px', color: '#16a34a', marginTop: '8px' }}>
-                      <div>Market Range: {salaryRec.market_range}</div>
-                      <div>Suggested Offer: <strong>{salaryRec.suggested_salary}</strong></div>
-                    </div>
-                  </div>
-                )}
-
-                <button
-                  onClick={() => handleGenerateOffer(selectedCandidate)}
-                  style={{
-                    padding: '12px 20px',
-                    backgroundColor: '#3b82f6',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                    fontWeight: '600'
-                  }}
-                >
-                  ✉️ Generate & Send Offer
-                </button>
-
-                {selectedCandidate.offer && (
-                  <div style={{ marginTop: '20px', backgroundColor: '#dbeafe', borderRadius: '6px', padding: '12px' }}>
-                    <div style={{ fontWeight: '600', color: '#1e40af' }}>Offer Sent</div>
-                    <div style={{ fontSize: '13px', color: '#1e3a8a', marginTop: '4px' }}>
-                      Status: {selectedCandidate.offer.status}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Onboarding Tab */}
-            {activeTab === 'onboarding' && (
-              <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '20px' }}>
-                <h3 style={{ margin: '0 0 16px 0', color: '#1f2937' }}>🚀 Onboarding & Engagement</h3>
-                
-                <button
-                  onClick={() => handleStartOnboarding(selectedCandidate)}
-                  style={{
-                    padding: '12px 20px',
-                    backgroundColor: '#10b981',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                    fontWeight: '600',
-                    marginBottom: '20px'
-                  }}
-                >
-                  🎉 Start Onboarding
-                </button>
-
-                {selectedCandidate.onboarding && (
-                  <div style={{ backgroundColor: '#f3f4f6', borderRadius: '6px', padding: '12px' }}>
-                    <h4 style={{ margin: '0 0 12px 0', color: '#374151' }}>Onboarding Tasks</h4>
-                    {selectedCandidate.onboarding.tasks?.map((task, idx) => (
-                      <div key={idx} style={{ padding: '8px', backgroundColor: 'white', borderRadius: '4px', marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ color: '#1f2937' }}>{task.task}</span>
-                        <span style={{
-                          padding: '2px 8px',
-                          borderRadius: '4px',
-                          fontSize: '11px',
-                          fontWeight: '600',
-                          backgroundColor: task.status === 'in_progress' ? '#fef3c7' : task.status === 'completed' ? '#d1fae5' : '#e5e7eb',
-                          color: task.status === 'in_progress' ? '#92400e' : task.status === 'completed' ? '#065f46' : '#374151'
-                        }}>
-                          {task.status}
-                        </span>
-                      </div>
-                    ))}
                   </div>
                 )}
               </div>

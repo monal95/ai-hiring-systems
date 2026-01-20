@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './JobApplicationForm.css';
+import API_BASE_URL from '../config/api';
+import '../styles/JobApplicationForm.css';
 
 const JobApplicationForm = ({ jobId }) => {
   const [job, setJob] = useState(null);
@@ -34,7 +35,7 @@ const JobApplicationForm = ({ jobId }) => {
 
   const fetchJobDetails = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/jobs/${jobId}`);
+      const response = await axios.get(`${API_BASE_URL}/api/jobs/${jobId}`);
       setJob(response.data);
       setLoading(false);
     } catch (err) {
@@ -84,7 +85,7 @@ const JobApplicationForm = ({ jobId }) => {
       submitData.append('jobId', jobId);
       submitData.append('appliedAt', new Date().toISOString());
 
-      await axios.post('http://localhost:5000/api/applications/public', submitData, {
+      await axios.post(`${API_BASE_URL}/api/applications/public`, submitData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

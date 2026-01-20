@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../config/api';
 
 const LinkedInShare = ({ jobData, onShareComplete }) => {
   const [sharing, setSharing] = useState(false);
@@ -12,7 +13,7 @@ const LinkedInShare = ({ jobData, onShareComplete }) => {
 
   const generatePreview = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/linkedin/generate-post', jobData);
+      const response = await axios.post(`${API_BASE_URL}/api/linkedin/generate-post`, jobData);
       setPostPreview(response.data.post_content);
     } catch (err) {
       console.error('Error generating preview:', err);
@@ -27,7 +28,7 @@ const LinkedInShare = ({ jobData, onShareComplete }) => {
       const sessionToken = getSessionToken();
       
       const response = await axios.post(
-        'http://localhost:5000/api/linkedin/share/job',
+        `${API_BASE_URL}/api/linkedin/share/job`,
         { job_data: jobData },
         {
           headers: sessionToken ? { 'X-LinkedIn-Session': sessionToken } : {}
@@ -40,8 +41,13 @@ const LinkedInShare = ({ jobData, onShareComplete }) => {
       // Handle redirect mode
       if (result.mode === 'REDIRECT') {
         // Copy post content to clipboard
-        if (navigator.clipboard && result.post_content) {
-          await navigator.clipboard.writeText(result.post_content);
+        if (result.post_content) {
+          try {
+            await navigator.clipboard.writeText(result.post_content);
+          } catch (clipboardErr) {
+            console.warn('Clipboard copy failed:', clipboardErr);
+            // Fallback: content is available in UI for manual copy
+          }
         }
       }
 
@@ -65,7 +71,10 @@ const LinkedInShare = ({ jobData, onShareComplete }) => {
     // Copy content to clipboard first
     const content = shareResult?.post_content || postPreview;
     if (content) {
-      navigator.clipboard.writeText(content);
+      navigator.clipboard.writeText(content).catch(err => {
+        console.warn('Clipboard copy failed:', err);
+        // Content is still available in UI for manual copy
+      });
     }
     // Open LinkedIn post composer
     window.open('https://www.linkedin.com/feed/?shareActive=true', '_blank', 'width=700,height=600');
@@ -75,7 +84,10 @@ const LinkedInShare = ({ jobData, onShareComplete }) => {
     // Copy content to clipboard first
     const content = shareResult?.post_content || postPreview;
     if (content) {
-      navigator.clipboard.writeText(content);
+      navigator.clipboard.writeText(content).catch(err => {
+        console.warn('Clipboard copy failed:', err);
+        // Content is still available in UI for manual copy
+      });
     }
     // Use free job posting URL (available to all users)
     window.open('https://www.linkedin.com/jobs/post/', '_blank');
@@ -84,8 +96,13 @@ const LinkedInShare = ({ jobData, onShareComplete }) => {
   const copyToClipboard = async () => {
     const content = postPreview || shareResult?.post_content;
     if (content) {
-      await navigator.clipboard.writeText(content);
-      alert('✅ Post content copied to clipboard!');
+      try {
+        await navigator.clipboard.writeText(content);
+        alert('✅ Post content copied to clipboard!');
+      } catch (err) {
+        console.error('Failed to copy to clipboard:', err);
+        alert('Unable to copy to clipboard. Please try again or manually copy the content.');
+      }
     }
   };
 

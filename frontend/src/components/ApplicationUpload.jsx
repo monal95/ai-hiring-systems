@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './CandidateList.css';
+import API_BASE_URL from '../config/api';
+import '../styles/CandidateList.css';
 
 const ApplicationUpload = ({ jobId, onBack, onApplicationSubmitted }) => {
   const [jobs, setJobs] = useState([]);
@@ -22,7 +23,7 @@ const ApplicationUpload = ({ jobId, onBack, onApplicationSubmitted }) => {
 
   const fetchJobs = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/jobs');
+      const response = await axios.get(`${API_BASE_URL}/api/jobs`);
       setJobs(response.data);
       if (response.data.length > 0 && !selectedJob) {
         setSelectedJob(response.data[0].id);
@@ -73,7 +74,7 @@ const ApplicationUpload = ({ jobId, onBack, onApplicationSubmitted }) => {
     setSubmitting(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/apply', formData, {
+      const response = await axios.post(`${API_BASE_URL}/api/apply`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 

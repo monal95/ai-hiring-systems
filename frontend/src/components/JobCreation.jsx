@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './JobCreation.css';
+import API_BASE_URL from '../config/api';
+import '../styles/JobCreation.css';
 import LinkedInLogin from './LinkedInLogin';
 import LinkedInShare from './LinkedInShare';
 
@@ -14,7 +15,7 @@ const JobCreation = ({ onBack }) => {
     must_have_skills: '',
     good_to_have_skills: '',
     selected_platforms: [
-      'company_portal', 'linkedin', 'indeed', 'naukri', 'internal_referral'
+      'company_portal', 'linkedin'
     ] // All platforms selected by default
   });
 
@@ -35,7 +36,7 @@ const JobCreation = ({ onBack }) => {
       const sessionToken = localStorage.getItem('linkedin_session');
       if (sessionToken) {
         try {
-          const response = await axios.get('http://localhost:5000/api/auth/linkedin/status', {
+          const response = await axios.get(`${API_BASE_URL}/api/auth/linkedin/status`, {
             headers: { 'X-LinkedIn-Session': sessionToken }
           });
           setLinkedInConnected(response.data.connected);
@@ -65,7 +66,7 @@ const JobCreation = ({ onBack }) => {
   const fetchAISkillSuggestions = async (jobTitle) => {
     setSkillsLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/ai/suggest-skills', {
+      const response = await axios.post(`${API_BASE_URL}/api/ai/suggest-skills`, {
         job_title: jobTitle,
         current_skills: formData.must_have_skills.split(',').map(s => s.trim()).filter(Boolean)
       });
@@ -88,7 +89,7 @@ const JobCreation = ({ onBack }) => {
     
     setAiLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/ai/generate-job-description', {
+      const response = await axios.post(`${API_BASE_URL}/api/ai/generate-job-description`, {
         job_title: formData.title,
         department: formData.department,
         location: formData.location
@@ -177,7 +178,7 @@ const JobCreation = ({ onBack }) => {
 
     try {
       // Create the job first
-      const response = await axios.post('http://localhost:5000/api/jobs', jobData);
+      const response = await axios.post(`${API_BASE_URL}/api/jobs`, jobData);
       const jobId = response.data.id || response.data.job_id || Date.now();
       const applicationUrl = `${window.location.origin}/apply/${jobId}`;
       
@@ -196,7 +197,7 @@ const JobCreation = ({ onBack }) => {
         try {
           const sessionToken = localStorage.getItem('linkedin_session');
           const linkedInResponse = await axios.post(
-            'http://localhost:5000/api/linkedin/auto-post',
+            `${API_BASE_URL}/api/linkedin/auto-post`,
             { job_data: fullJobData },
             {
               headers: sessionToken ? { 'X-LinkedIn-Session': sessionToken } : {}
@@ -210,7 +211,10 @@ const JobCreation = ({ onBack }) => {
           } else {
             // Copy content to clipboard for manual posting
             if (linkedInResponse.data.post_content) {
-              navigator.clipboard.writeText(linkedInResponse.data.post_content);
+              navigator.clipboard.writeText(linkedInResponse.data.post_content).catch(err => {
+                console.warn('Clipboard copy failed:', err);
+                // Content is still available in the UI
+              });
             }
           }
         } catch (linkedInError) {
@@ -237,7 +241,10 @@ const JobCreation = ({ onBack }) => {
   };
 
   const copyLinkToClipboard = () => {
-    navigator.clipboard.writeText(getApplicationLink());
+    navigator.clipboard.writeText(getApplicationLink()).catch(err => {
+      console.error('Failed to copy to clipboard:', err);
+      alert('Unable to copy to clipboard. Link: ' + getApplicationLink());
+    });
     alert('Application link copied to clipboard!');
   };
 

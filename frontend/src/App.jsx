@@ -11,21 +11,27 @@ import CandidateManagement from './components/CandidateManagement';
 import JobManagement from './components/JobManagement';
 import JobApplicationForm from './components/JobApplicationForm';
 import PrivacyPolicy from './components/PrivacyPolicy';
+import InterviewSession from './components/InterviewSession';
 
 function App() {
   const [currentView, setCurrentView] = useState('dashboard');
   const [selectedJob, setSelectedJob] = useState(null);
   const [applicationJobId, setApplicationJobId] = useState(null);
+  const [interviewToken, setInterviewToken] = useState(null);
 
   // Check URL for application form route on load
   useEffect(() => {
     const path = window.location.pathname;
     const applyMatch = path.match(/^\/apply\/(.+)$/);
+    const interviewMatch = path.match(/^\/interview\/(.+)$/);
     const linkedInCallback = path.includes('/auth/linkedin/callback');
     
     if (applyMatch) {
       setApplicationJobId(applyMatch[1]);
       setCurrentView('public-application');
+    } else if (interviewMatch) {
+      setInterviewToken(interviewMatch[1]);
+      setCurrentView('interview-session');
     } else if (linkedInCallback) {
       // Handle LinkedIn OAuth callback - redirect to create-job view
       // The LinkedInLogin component will handle the token exchange
@@ -38,9 +44,13 @@ function App() {
     const handlePopState = () => {
       const path = window.location.pathname;
       const applyMatch = path.match(/^\/apply\/(.+)$/);
+      const interviewMatch = path.match(/^\/interview\/(.+)$/);
       if (applyMatch) {
         setApplicationJobId(applyMatch[1]);
         setCurrentView('public-application');
+      } else if (interviewMatch) {
+        setInterviewToken(interviewMatch[1]);
+        setCurrentView('interview-session');
       } else {
         setCurrentView('dashboard');
       }
@@ -53,6 +63,11 @@ function App() {
   // If on public application form, render only the form (no navbar)
   if (currentView === 'public-application' && applicationJobId) {
     return <JobApplicationForm jobId={applicationJobId} />;
+  }
+
+  // If on interview session, render only the interview (no navbar)
+  if (currentView === 'interview-session' && interviewToken) {
+    return <InterviewSession token={interviewToken} />;
   }
 
   const renderView = () => {

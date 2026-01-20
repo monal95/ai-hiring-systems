@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './Dashboard.css';
+import API_BASE_URL from '../config/api';
+import '../styles/Dashboard.css';
 
 const Dashboard = ({ onNavigate }) => {
   const [stats, setStats] = useState({
@@ -25,15 +26,15 @@ const Dashboard = ({ onNavigate }) => {
   const fetchStats = async () => {
     setRefreshing(true);
     try {
-      const response = await axios.get('http://localhost:5000/api/dashboard/stats');
+      const response = await axios.get(`${API_BASE_URL}/api/dashboard/stats`);
       setStats(response.data);
       setError(null);
       
       // Fetch jobs and candidates for detail views
-      const jobsRes = await axios.get('http://localhost:5000/api/jobs');
+      const jobsRes = await axios.get(`${API_BASE_URL}/api/jobs`);
       setJobs(jobsRes.data || []);
       
-      const candidatesRes = await axios.get('http://localhost:5000/api/candidates');
+      const candidatesRes = await axios.get(`${API_BASE_URL}/api/candidates`);
       setCandidates(candidatesRes.data || []);
     } catch (error) {
       console.error('Error fetching stats:', error);
