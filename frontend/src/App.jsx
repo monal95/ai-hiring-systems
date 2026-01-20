@@ -12,12 +12,23 @@ import JobManagement from './components/JobManagement';
 import JobApplicationForm from './components/JobApplicationForm';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import InterviewSession from './components/InterviewSession';
+import LandingPage from './components/LandingPage';
 
 function App() {
+  // Check if user has already seen landing page in this session
+  const [hasStarted, setHasStarted] = useState(() => {
+    return sessionStorage.getItem('hasStartedApp') === 'true';
+  });
   const [currentView, setCurrentView] = useState('dashboard');
   const [selectedJob, setSelectedJob] = useState(null);
   const [applicationJobId, setApplicationJobId] = useState(null);
   const [interviewToken, setInterviewToken] = useState(null);
+
+  // Handle "Get Started" from landing page
+  const handleGetStarted = () => {
+    sessionStorage.setItem('hasStartedApp', 'true');
+    setHasStarted(true);
+  };
 
   // Check URL for application form route on load
   useEffect(() => {
@@ -70,6 +81,12 @@ function App() {
     return <InterviewSession token={interviewToken} />;
   }
 
+  // Show landing page if user hasn't clicked "Get Started"
+  // Skip landing page for direct links (apply, interview, LinkedIn callback)
+  if (!hasStarted && currentView === 'dashboard') {
+    return <LandingPage onGetStarted={handleGetStarted} />;
+  }
+
   const renderView = () => {
     switch(currentView) {
       case 'dashboard':
@@ -112,7 +129,7 @@ function App() {
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#f5f5f5' }}>
       <nav style={{ background: '#2563eb' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '64px', flexWrap: 'wrap' }}>
-          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: 'white', margin: 0 }}>🎯 GCC Hiring System</h1>
+          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: 'white', margin: 0 }}>🎯 AI Hiring System</h1>
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
             <button 
               onClick={() => setCurrentView('dashboard')}
