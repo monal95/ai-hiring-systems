@@ -55,6 +55,62 @@
           "post_id": "linkedin_JOB1"
         }
       }
+    },
+    {
+      "title": "Senior Python developer",
+      "department": "Engineering",
+      "location": "Bengaluru",
+      "experience_required": "5+ years",
+      "description": "We are seeking an experienced Senior Python developer to join our team. As a Senior Python developer, you will be responsible for designing, developing, and implementing large-scale Python applications. You will work collaboratively with our team to identify and prioritize project requirements, develop innovative solutions, and ensure the delivery of high-quality products. If you are a motivated and talented Python developer with a passion for building scalable and efficient systems, we want to hear from you.",
+      "must_have_skills": "Strong proficiency in Python 3.x, Experience with Python frameworks such as Django or Flask, Knowledge of database systems such as MySQL or PostgreSQL, Familiarity with Agile development methodologies, Excellent problem-solving skills",
+      "good_to_have_skills": "Experience with cloud platforms such as AWS or Azure, Knowledge of containerization using Docker, Familiarity with CI/CD pipelines using Jenkins or GitLab CI/CD",
+      "selected_platforms": [
+        "company_portal",
+        "linkedin"
+      ],
+      "requirements": {
+        "must_have": [
+          "Strong proficiency in Python 3.x",
+          "Experience with Python frameworks such as Django or Flask",
+          "Knowledge of database systems such as MySQL or PostgreSQL",
+          "Familiarity with Agile development methodologies",
+          "Excellent problem-solving skills"
+        ],
+        "good_to_have": [
+          "Experience with cloud platforms such as AWS or Azure",
+          "Knowledge of containerization using Docker",
+          "Familiarity with CI/CD pipelines using Jenkins or GitLab CI/CD"
+        ]
+      },
+      "id": "JOB2",
+      "created_at": "2026-01-20T22:35:01.255850",
+      "status": "active",
+      "applications": 3,
+      "openings": 5,
+      "hired_count": 0,
+      "ai_generated_message": "\n\ud83d\ude80 Now Hiring: Senior Python developer\n\n\ud83d\udccd Location: Bengaluru\n\ud83c\udfaf Openings: 5\n\nWe are seeking an experienced Senior Python developer to join our team. As a Senior Python developer, you will be responsible for designing, developing, and implementing large-scale Python applications. You will work collaboratively with our team to identify and prioritize project requirements, develop innovative solutions, and ensure the delivery of high-quality products. If you are a motivated and talented Python developer with a passion for building scalable and efficient systems, we want to hear from you.\n\n\u2705 Must-Have Skills:\n  \u2022 Strong proficiency in Python 3.x\n  \u2022 Experience with Python frameworks such as Django or Flask\n  \u2022 Knowledge of database systems such as MySQL or PostgreSQL\n  \u2022 Familiarity with Agile development methodologies\n  \u2022 Excellent problem-solving skills\n\n\ud83d\udca1 Nice-to-Have Skills:\n  \u2022 Experience with cloud platforms such as AWS or Azure\n  \u2022 Knowledge of containerization using Docker\n  \u2022 Familiarity with CI/CD pipelines using Jenkins or GitLab CI/CD\n\n\ud83d\udd17 Apply Now via the link below!\n#Hiring #JobOpening #Careers",
+      "platforms": {
+        "company_portal": {
+          "status": "published",
+          "published_at": "2026-01-20T22:35:01.255927",
+          "views": 0,
+          "clicks": 0,
+          "applications": 0,
+          "ignored": 0,
+          "url": "https://company_portal.com/jobs/JOB2",
+          "post_id": "company_portal_JOB2"
+        },
+        "linkedin": {
+          "status": "published",
+          "published_at": "2026-01-20T22:35:01.255972",
+          "views": 0,
+          "clicks": 0,
+          "applications": 0,
+          "ignored": 0,
+          "url": "https://linkedin.com/jobs/JOB2",
+          "post_id": "linkedin_JOB2"
+        }
+      }
     }
   ]
 }

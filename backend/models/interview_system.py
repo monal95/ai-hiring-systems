@@ -578,6 +578,21 @@ class InterviewSessionManager:
         print(f"[InterviewSession] Response submitted for question {question_id}")
         return {'success': True}
     
+    def update_session(self, interview_token: str, session_data: dict) -> dict:
+        """Update an existing session with new data"""
+        session = self.get_interview_session(interview_token)
+        if not session:
+            return {'error': 'Session not found'}
+        
+        # Find the session_id and update
+        for session_id, stored_session in self.sessions.items():
+            if stored_session['interview_token'] == interview_token:
+                self.sessions[session_id] = session_data
+                self.save_sessions()
+                return {'success': True}
+        
+        return {'error': 'Session not found'}
+    
     def submit_coding_solution(self, interview_token: str, code: str, language: str) -> dict:
         """Submit coding solution"""
         session = self.get_interview_session(interview_token)

@@ -5771,5 +5771,1311 @@
     "scores": {},
     "created_at": "2026-01-05T23:31:41.795416",
     "expires_at": "2026-01-12T23:31:41.795430"
+  },
+  "BB3BCFBD": {
+    "session_id": "BB3BCFBD",
+    "interview_token": "62941da9-6f49-4a91-b5fd-4761f1f93b87",
+    "candidate_id": "CAND2",
+    "candidate_name": "Monal Puttakosh",
+    "job_id": "JOB2",
+    "questions": {
+      "technical": [
+        {
+          "id": "T1",
+          "question": "Tell us about your experience relevant to the Senior Python developer role.",
+          "difficulty": "easy",
+          "type": "technical",
+          "skill": "experience"
+        },
+        {
+          "id": "T2",
+          "question": "Describe a complex technical problem you solved and your approach.",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "problem_solving"
+        },
+        {
+          "id": "T3",
+          "question": "What technologies and tools are you most proficient with?",
+          "difficulty": "easy",
+          "type": "technical",
+          "skill": "tools"
+        },
+        {
+          "id": "T4",
+          "question": "How do you approach debugging and troubleshooting issues?",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "debugging"
+        },
+        {
+          "id": "T5",
+          "question": "Explain a system or application you have designed or architected.",
+          "difficulty": "hard",
+          "type": "technical",
+          "skill": "architecture"
+        },
+        {
+          "id": "T6",
+          "question": "How do you ensure code quality in your projects?",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "quality"
+        },
+        {
+          "id": "T7",
+          "question": "Describe your experience with version control and CI/CD.",
+          "difficulty": "easy",
+          "type": "technical",
+          "skill": "devops"
+        },
+        {
+          "id": "T8",
+          "question": "How do you handle performance optimization?",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "performance"
+        },
+        {
+          "id": "T9",
+          "question": "What is your approach to learning new technologies?",
+          "difficulty": "easy",
+          "type": "technical",
+          "skill": "learning"
+        },
+        {
+          "id": "T10",
+          "question": "Describe your experience with database design and management.",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "database"
+        },
+        {
+          "id": "T11",
+          "question": "How do you approach API design and integration?",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "api"
+        },
+        {
+          "id": "T12",
+          "question": "Explain your experience with testing and test automation.",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "testing"
+        },
+        {
+          "id": "T13",
+          "question": "How do you handle security considerations in your code?",
+          "difficulty": "hard",
+          "type": "technical",
+          "skill": "security"
+        },
+        {
+          "id": "T14",
+          "question": "Describe a time you had to scale an application.",
+          "difficulty": "hard",
+          "type": "technical",
+          "skill": "scalability"
+        },
+        {
+          "id": "T15",
+          "question": "What best practices do you follow in software development?",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "best_practices"
+        }
+      ],
+      "behavioral": [
+        {
+          "id": "B1",
+          "question": "Tell us about a time you worked effectively in a team.",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "teamwork"
+        },
+        {
+          "id": "B2",
+          "question": "Describe a situation where you had to meet a tight deadline.",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "time_management"
+        },
+        {
+          "id": "B3",
+          "question": "How do you handle constructive criticism?",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "feedback"
+        },
+        {
+          "id": "B4",
+          "question": "Tell us about a project failure and what you learned.",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "resilience"
+        },
+        {
+          "id": "B5",
+          "question": "How do you prioritize tasks when everything seems urgent?",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "prioritization"
+        },
+        {
+          "id": "B6",
+          "question": "Describe a time you took initiative without being asked.",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "initiative"
+        },
+        {
+          "id": "B7",
+          "question": "How do you handle conflicts with colleagues?",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "conflict_resolution"
+        },
+        {
+          "id": "B8",
+          "question": "Tell us about a time you mentored or helped a team member.",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "leadership"
+        },
+        {
+          "id": "B9",
+          "question": "How do you stay motivated during repetitive tasks?",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "motivation"
+        },
+        {
+          "id": "B10",
+          "question": "Describe a situation where you had to adapt to change quickly.",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "adaptability"
+        },
+        {
+          "id": "B11",
+          "question": "How do you communicate complex ideas to non-technical stakeholders?",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "communication"
+        },
+        {
+          "id": "B12",
+          "question": "Tell us about your greatest professional achievement.",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "achievement"
+        },
+        {
+          "id": "B13",
+          "question": "How do you handle working with difficult team members?",
+          "difficulty": "hard",
+          "type": "behavioral",
+          "competency": "interpersonal"
+        },
+        {
+          "id": "B14",
+          "question": "Describe a time you had to make a difficult decision.",
+          "difficulty": "hard",
+          "type": "behavioral",
+          "competency": "decision_making"
+        },
+        {
+          "id": "B15",
+          "question": "How do you balance quality with speed?",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "balance"
+        },
+        {
+          "id": "B16",
+          "question": "Tell us about a time you went above and beyond for a project.",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "dedication"
+        },
+        {
+          "id": "B17",
+          "question": "How do you handle uncertainty and ambiguity in projects?",
+          "difficulty": "hard",
+          "type": "behavioral",
+          "competency": "uncertainty"
+        },
+        {
+          "id": "B18",
+          "question": "Describe your approach to work-life balance.",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "balance"
+        },
+        {
+          "id": "B19",
+          "question": "Tell us about a time you disagreed with a decision but still supported it.",
+          "difficulty": "hard",
+          "type": "behavioral",
+          "competency": "professionalism"
+        },
+        {
+          "id": "B20",
+          "question": "Where do you see yourself in 5 years?",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "vision"
+        }
+      ],
+      "coding": [
+        {
+          "id": "CODE1",
+          "title": "Two Sum",
+          "description": "Given an array of integers nums and an integer target, return indices of the two numbers that add up to target. You may assume each input has exactly one solution.",
+          "difficulty": "medium",
+          "type": "coding",
+          "language": "python",
+          "constraints": [
+            "2 <= nums.length <= 10^4",
+            "-10^9 <= nums[i] <= 10^9",
+            "Only one valid answer exists"
+          ],
+          "examples": [
+            {
+              "input": "nums = [2, 7, 11, 15], target = 9",
+              "output": "[0, 1]",
+              "explanation": "nums[0] + nums[1] = 2 + 7 = 9"
+            },
+            {
+              "input": "nums = [3, 2, 4], target = 6",
+              "output": "[1, 2]",
+              "explanation": "nums[1] + nums[2] = 2 + 4 = 6"
+            }
+          ],
+          "test_cases": [
+            {
+              "input": "[2, 7, 11, 15], 9",
+              "expected_output": "[0, 1]"
+            },
+            {
+              "input": "[3, 2, 4], 6",
+              "expected_output": "[1, 2]"
+            },
+            {
+              "input": "[3, 3], 6",
+              "expected_output": "[0, 1]"
+            }
+          ],
+          "hints": [
+            "Use a hash map to store seen values",
+            "For each element, check if target - element exists"
+          ]
+        },
+        {
+          "id": "CODE2",
+          "title": "Longest Increasing Subsequence",
+          "description": "Given an integer array nums, return the length of the longest strictly increasing subsequence.",
+          "difficulty": "hard",
+          "type": "coding",
+          "language": "python",
+          "constraints": [
+            "1 <= nums.length <= 2500",
+            "-10^4 <= nums[i] <= 10^4"
+          ],
+          "examples": [
+            {
+              "input": "nums = [10, 9, 2, 5, 3, 7, 101, 18]",
+              "output": "4",
+              "explanation": "The LIS is [2, 3, 7, 101], length = 4"
+            },
+            {
+              "input": "nums = [0, 1, 0, 3, 2, 3]",
+              "output": "4",
+              "explanation": "The LIS is [0, 1, 2, 3], length = 4"
+            }
+          ],
+          "test_cases": [
+            {
+              "input": "[10, 9, 2, 5, 3, 7, 101, 18]",
+              "expected_output": "4"
+            },
+            {
+              "input": "[0, 1, 0, 3, 2, 3]",
+              "expected_output": "4"
+            },
+            {
+              "input": "[7, 7, 7, 7, 7]",
+              "expected_output": "1"
+            }
+          ],
+          "hints": [
+            "Dynamic programming approach works in O(n^2)",
+            "Binary search can optimize to O(n log n)"
+          ]
+        }
+      ],
+      "total_questions": 37,
+      "generated_at": "2026-01-20T22:35:56.577175",
+      "fallback": true
+    },
+    "status": "pending",
+    "started_at": null,
+    "completed_at": null,
+    "responses": {},
+    "coding_submission": null,
+    "scores": {},
+    "created_at": "2026-01-20T22:35:56.578166",
+    "expires_at": "2026-01-27T22:35:56.578174"
+  },
+  "438DF283": {
+    "session_id": "438DF283",
+    "interview_token": "dbf563e3-e996-434b-be62-062436bcc00b",
+    "candidate_id": "CAND3",
+    "candidate_name": "Monal Putta",
+    "job_id": "JOB2",
+    "questions": {
+      "technical": [
+        {
+          "id": "T1",
+          "question": "Tell us about your experience relevant to the Senior Python developer role.",
+          "difficulty": "easy",
+          "type": "technical",
+          "skill": "experience"
+        },
+        {
+          "id": "T2",
+          "question": "Describe a complex technical problem you solved and your approach.",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "problem_solving"
+        },
+        {
+          "id": "T3",
+          "question": "What technologies and tools are you most proficient with?",
+          "difficulty": "easy",
+          "type": "technical",
+          "skill": "tools"
+        },
+        {
+          "id": "T4",
+          "question": "How do you approach debugging and troubleshooting issues?",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "debugging"
+        },
+        {
+          "id": "T5",
+          "question": "Explain a system or application you have designed or architected.",
+          "difficulty": "hard",
+          "type": "technical",
+          "skill": "architecture"
+        },
+        {
+          "id": "T6",
+          "question": "How do you ensure code quality in your projects?",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "quality"
+        },
+        {
+          "id": "T7",
+          "question": "Describe your experience with version control and CI/CD.",
+          "difficulty": "easy",
+          "type": "technical",
+          "skill": "devops"
+        },
+        {
+          "id": "T8",
+          "question": "How do you handle performance optimization?",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "performance"
+        },
+        {
+          "id": "T9",
+          "question": "What is your approach to learning new technologies?",
+          "difficulty": "easy",
+          "type": "technical",
+          "skill": "learning"
+        },
+        {
+          "id": "T10",
+          "question": "Describe your experience with database design and management.",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "database"
+        },
+        {
+          "id": "T11",
+          "question": "How do you approach API design and integration?",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "api"
+        },
+        {
+          "id": "T12",
+          "question": "Explain your experience with testing and test automation.",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "testing"
+        },
+        {
+          "id": "T13",
+          "question": "How do you handle security considerations in your code?",
+          "difficulty": "hard",
+          "type": "technical",
+          "skill": "security"
+        },
+        {
+          "id": "T14",
+          "question": "Describe a time you had to scale an application.",
+          "difficulty": "hard",
+          "type": "technical",
+          "skill": "scalability"
+        },
+        {
+          "id": "T15",
+          "question": "What best practices do you follow in software development?",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "best_practices"
+        }
+      ],
+      "behavioral": [
+        {
+          "id": "B1",
+          "question": "Tell us about a time you worked effectively in a team.",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "teamwork"
+        },
+        {
+          "id": "B2",
+          "question": "Describe a situation where you had to meet a tight deadline.",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "time_management"
+        },
+        {
+          "id": "B3",
+          "question": "How do you handle constructive criticism?",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "feedback"
+        },
+        {
+          "id": "B4",
+          "question": "Tell us about a project failure and what you learned.",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "resilience"
+        },
+        {
+          "id": "B5",
+          "question": "How do you prioritize tasks when everything seems urgent?",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "prioritization"
+        },
+        {
+          "id": "B6",
+          "question": "Describe a time you took initiative without being asked.",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "initiative"
+        },
+        {
+          "id": "B7",
+          "question": "How do you handle conflicts with colleagues?",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "conflict_resolution"
+        },
+        {
+          "id": "B8",
+          "question": "Tell us about a time you mentored or helped a team member.",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "leadership"
+        },
+        {
+          "id": "B9",
+          "question": "How do you stay motivated during repetitive tasks?",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "motivation"
+        },
+        {
+          "id": "B10",
+          "question": "Describe a situation where you had to adapt to change quickly.",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "adaptability"
+        },
+        {
+          "id": "B11",
+          "question": "How do you communicate complex ideas to non-technical stakeholders?",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "communication"
+        },
+        {
+          "id": "B12",
+          "question": "Tell us about your greatest professional achievement.",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "achievement"
+        },
+        {
+          "id": "B13",
+          "question": "How do you handle working with difficult team members?",
+          "difficulty": "hard",
+          "type": "behavioral",
+          "competency": "interpersonal"
+        },
+        {
+          "id": "B14",
+          "question": "Describe a time you had to make a difficult decision.",
+          "difficulty": "hard",
+          "type": "behavioral",
+          "competency": "decision_making"
+        },
+        {
+          "id": "B15",
+          "question": "How do you balance quality with speed?",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "balance"
+        },
+        {
+          "id": "B16",
+          "question": "Tell us about a time you went above and beyond for a project.",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "dedication"
+        },
+        {
+          "id": "B17",
+          "question": "How do you handle uncertainty and ambiguity in projects?",
+          "difficulty": "hard",
+          "type": "behavioral",
+          "competency": "uncertainty"
+        },
+        {
+          "id": "B18",
+          "question": "Describe your approach to work-life balance.",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "balance"
+        },
+        {
+          "id": "B19",
+          "question": "Tell us about a time you disagreed with a decision but still supported it.",
+          "difficulty": "hard",
+          "type": "behavioral",
+          "competency": "professionalism"
+        },
+        {
+          "id": "B20",
+          "question": "Where do you see yourself in 5 years?",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "vision"
+        }
+      ],
+      "coding": [
+        {
+          "id": "CODE1",
+          "title": "Two Sum",
+          "description": "Given an array of integers nums and an integer target, return indices of the two numbers that add up to target. You may assume each input has exactly one solution.",
+          "difficulty": "medium",
+          "type": "coding",
+          "language": "python",
+          "constraints": [
+            "2 <= nums.length <= 10^4",
+            "-10^9 <= nums[i] <= 10^9",
+            "Only one valid answer exists"
+          ],
+          "examples": [
+            {
+              "input": "nums = [2, 7, 11, 15], target = 9",
+              "output": "[0, 1]",
+              "explanation": "nums[0] + nums[1] = 2 + 7 = 9"
+            },
+            {
+              "input": "nums = [3, 2, 4], target = 6",
+              "output": "[1, 2]",
+              "explanation": "nums[1] + nums[2] = 2 + 4 = 6"
+            }
+          ],
+          "test_cases": [
+            {
+              "input": "[2, 7, 11, 15], 9",
+              "expected_output": "[0, 1]"
+            },
+            {
+              "input": "[3, 2, 4], 6",
+              "expected_output": "[1, 2]"
+            },
+            {
+              "input": "[3, 3], 6",
+              "expected_output": "[0, 1]"
+            }
+          ],
+          "hints": [
+            "Use a hash map to store seen values",
+            "For each element, check if target - element exists"
+          ]
+        },
+        {
+          "id": "CODE2",
+          "title": "Longest Increasing Subsequence",
+          "description": "Given an integer array nums, return the length of the longest strictly increasing subsequence.",
+          "difficulty": "hard",
+          "type": "coding",
+          "language": "python",
+          "constraints": [
+            "1 <= nums.length <= 2500",
+            "-10^4 <= nums[i] <= 10^4"
+          ],
+          "examples": [
+            {
+              "input": "nums = [10, 9, 2, 5, 3, 7, 101, 18]",
+              "output": "4",
+              "explanation": "The LIS is [2, 3, 7, 101], length = 4"
+            },
+            {
+              "input": "nums = [0, 1, 0, 3, 2, 3]",
+              "output": "4",
+              "explanation": "The LIS is [0, 1, 2, 3], length = 4"
+            }
+          ],
+          "test_cases": [
+            {
+              "input": "[10, 9, 2, 5, 3, 7, 101, 18]",
+              "expected_output": "4"
+            },
+            {
+              "input": "[0, 1, 0, 3, 2, 3]",
+              "expected_output": "4"
+            },
+            {
+              "input": "[7, 7, 7, 7, 7]",
+              "expected_output": "1"
+            }
+          ],
+          "hints": [
+            "Dynamic programming approach works in O(n^2)",
+            "Binary search can optimize to O(n log n)"
+          ]
+        }
+      ],
+      "total_questions": 37,
+      "generated_at": "2026-01-20T22:49:57.976704",
+      "fallback": true
+    },
+    "status": "pending",
+    "started_at": null,
+    "completed_at": null,
+    "responses": {},
+    "coding_submission": null,
+    "scores": {},
+    "created_at": "2026-01-20T22:49:57.978408",
+    "expires_at": "2026-01-27T22:49:57.978426"
+  },
+  "6AA600B7": {
+    "session_id": "6AA600B7",
+    "interview_token": "67b94445-461a-4421-9acd-5e8d622838e8",
+    "candidate_id": "CAND4",
+    "candidate_name": "Monal Prashanth",
+    "job_id": "JOB2",
+    "questions": {
+      "technical": [
+        {
+          "id": "T1",
+          "question": "Tell us about your experience relevant to the Senior Python developer role.",
+          "difficulty": "easy",
+          "type": "technical",
+          "skill": "experience"
+        },
+        {
+          "id": "T2",
+          "question": "Describe a complex technical problem you solved and your approach.",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "problem_solving"
+        },
+        {
+          "id": "T3",
+          "question": "What technologies and tools are you most proficient with?",
+          "difficulty": "easy",
+          "type": "technical",
+          "skill": "tools"
+        },
+        {
+          "id": "T4",
+          "question": "How do you approach debugging and troubleshooting issues?",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "debugging"
+        },
+        {
+          "id": "T5",
+          "question": "Explain a system or application you have designed or architected.",
+          "difficulty": "hard",
+          "type": "technical",
+          "skill": "architecture"
+        },
+        {
+          "id": "T6",
+          "question": "How do you ensure code quality in your projects?",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "quality"
+        },
+        {
+          "id": "T7",
+          "question": "Describe your experience with version control and CI/CD.",
+          "difficulty": "easy",
+          "type": "technical",
+          "skill": "devops"
+        },
+        {
+          "id": "T8",
+          "question": "How do you handle performance optimization?",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "performance"
+        },
+        {
+          "id": "T9",
+          "question": "What is your approach to learning new technologies?",
+          "difficulty": "easy",
+          "type": "technical",
+          "skill": "learning"
+        },
+        {
+          "id": "T10",
+          "question": "Describe your experience with database design and management.",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "database"
+        },
+        {
+          "id": "T11",
+          "question": "How do you approach API design and integration?",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "api"
+        },
+        {
+          "id": "T12",
+          "question": "Explain your experience with testing and test automation.",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "testing"
+        },
+        {
+          "id": "T13",
+          "question": "How do you handle security considerations in your code?",
+          "difficulty": "hard",
+          "type": "technical",
+          "skill": "security"
+        },
+        {
+          "id": "T14",
+          "question": "Describe a time you had to scale an application.",
+          "difficulty": "hard",
+          "type": "technical",
+          "skill": "scalability"
+        },
+        {
+          "id": "T15",
+          "question": "What best practices do you follow in software development?",
+          "difficulty": "medium",
+          "type": "technical",
+          "skill": "best_practices"
+        }
+      ],
+      "behavioral": [
+        {
+          "id": "B1",
+          "question": "Tell us about a time you worked effectively in a team.",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "teamwork"
+        },
+        {
+          "id": "B2",
+          "question": "Describe a situation where you had to meet a tight deadline.",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "time_management"
+        },
+        {
+          "id": "B3",
+          "question": "How do you handle constructive criticism?",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "feedback"
+        },
+        {
+          "id": "B4",
+          "question": "Tell us about a project failure and what you learned.",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "resilience"
+        },
+        {
+          "id": "B5",
+          "question": "How do you prioritize tasks when everything seems urgent?",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "prioritization"
+        },
+        {
+          "id": "B6",
+          "question": "Describe a time you took initiative without being asked.",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "initiative"
+        },
+        {
+          "id": "B7",
+          "question": "How do you handle conflicts with colleagues?",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "conflict_resolution"
+        },
+        {
+          "id": "B8",
+          "question": "Tell us about a time you mentored or helped a team member.",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "leadership"
+        },
+        {
+          "id": "B9",
+          "question": "How do you stay motivated during repetitive tasks?",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "motivation"
+        },
+        {
+          "id": "B10",
+          "question": "Describe a situation where you had to adapt to change quickly.",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "adaptability"
+        },
+        {
+          "id": "B11",
+          "question": "How do you communicate complex ideas to non-technical stakeholders?",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "communication"
+        },
+        {
+          "id": "B12",
+          "question": "Tell us about your greatest professional achievement.",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "achievement"
+        },
+        {
+          "id": "B13",
+          "question": "How do you handle working with difficult team members?",
+          "difficulty": "hard",
+          "type": "behavioral",
+          "competency": "interpersonal"
+        },
+        {
+          "id": "B14",
+          "question": "Describe a time you had to make a difficult decision.",
+          "difficulty": "hard",
+          "type": "behavioral",
+          "competency": "decision_making"
+        },
+        {
+          "id": "B15",
+          "question": "How do you balance quality with speed?",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "balance"
+        },
+        {
+          "id": "B16",
+          "question": "Tell us about a time you went above and beyond for a project.",
+          "difficulty": "medium",
+          "type": "behavioral",
+          "competency": "dedication"
+        },
+        {
+          "id": "B17",
+          "question": "How do you handle uncertainty and ambiguity in projects?",
+          "difficulty": "hard",
+          "type": "behavioral",
+          "competency": "uncertainty"
+        },
+        {
+          "id": "B18",
+          "question": "Describe your approach to work-life balance.",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "balance"
+        },
+        {
+          "id": "B19",
+          "question": "Tell us about a time you disagreed with a decision but still supported it.",
+          "difficulty": "hard",
+          "type": "behavioral",
+          "competency": "professionalism"
+        },
+        {
+          "id": "B20",
+          "question": "Where do you see yourself in 5 years?",
+          "difficulty": "easy",
+          "type": "behavioral",
+          "competency": "vision"
+        }
+      ],
+      "coding": [
+        {
+          "id": "CODE1",
+          "title": "Two Sum",
+          "description": "Given an array of integers nums and an integer target, return indices of the two numbers that add up to target. You may assume each input has exactly one solution.",
+          "difficulty": "medium",
+          "type": "coding",
+          "language": "python",
+          "constraints": [
+            "2 <= nums.length <= 10^4",
+            "-10^9 <= nums[i] <= 10^9",
+            "Only one valid answer exists"
+          ],
+          "examples": [
+            {
+              "input": "nums = [2, 7, 11, 15], target = 9",
+              "output": "[0, 1]",
+              "explanation": "nums[0] + nums[1] = 2 + 7 = 9"
+            },
+            {
+              "input": "nums = [3, 2, 4], target = 6",
+              "output": "[1, 2]",
+              "explanation": "nums[1] + nums[2] = 2 + 4 = 6"
+            }
+          ],
+          "test_cases": [
+            {
+              "input": "[2, 7, 11, 15], 9",
+              "expected_output": "[0, 1]"
+            },
+            {
+              "input": "[3, 2, 4], 6",
+              "expected_output": "[1, 2]"
+            },
+            {
+              "input": "[3, 3], 6",
+              "expected_output": "[0, 1]"
+            }
+          ],
+          "hints": [
+            "Use a hash map to store seen values",
+            "For each element, check if target - element exists"
+          ]
+        },
+        {
+          "id": "CODE2",
+          "title": "Longest Increasing Subsequence",
+          "description": "Given an integer array nums, return the length of the longest strictly increasing subsequence.",
+          "difficulty": "hard",
+          "type": "coding",
+          "language": "python",
+          "constraints": [
+            "1 <= nums.length <= 2500",
+            "-10^4 <= nums[i] <= 10^4"
+          ],
+          "examples": [
+            {
+              "input": "nums = [10, 9, 2, 5, 3, 7, 101, 18]",
+              "output": "4",
+              "explanation": "The LIS is [2, 3, 7, 101], length = 4"
+            },
+            {
+              "input": "nums = [0, 1, 0, 3, 2, 3]",
+              "output": "4",
+              "explanation": "The LIS is [0, 1, 2, 3], length = 4"
+            }
+          ],
+          "test_cases": [
+            {
+              "input": "[10, 9, 2, 5, 3, 7, 101, 18]",
+              "expected_output": "4"
+            },
+            {
+              "input": "[0, 1, 0, 3, 2, 3]",
+              "expected_output": "4"
+            },
+            {
+              "input": "[7, 7, 7, 7, 7]",
+              "expected_output": "1"
+            }
+          ],
+          "hints": [
+            "Dynamic programming approach works in O(n^2)",
+            "Binary search can optimize to O(n log n)"
+          ]
+        }
+      ],
+      "total_questions": 37,
+      "generated_at": "2026-01-20T22:58:19.073689",
+      "fallback": true
+    },
+    "status": "in_progress",
+    "started_at": "2026-01-20T23:01:24.160171",
+    "completed_at": null,
+    "responses": {},
+    "coding_submission": null,
+    "scores": {},
+    "created_at": "2026-01-20T22:58:19.075383",
+    "expires_at": "2026-01-27T22:58:19.075399",
+    "proctoring": {
+      "violations": [
+        {
+          "id": 1768930287375,
+          "type": "focus_lost",
+          "severity": "medium",
+          "message": "Browser window lost focus",
+          "timestamp": "2026-01-20T17:31:27.375Z",
+          "server_timestamp": "2026-01-20T23:01:28.060811"
+        },
+        {
+          "id": 1768930298834,
+          "type": "focus_lost",
+          "severity": "medium",
+          "message": "Browser window lost focus",
+          "timestamp": "2026-01-20T17:31:38.834Z",
+          "server_timestamp": "2026-01-20T23:01:39.329494"
+        },
+        {
+          "id": 1768930303198,
+          "type": "fullscreen_denied",
+          "severity": "high",
+          "message": "Fullscreen mode was denied",
+          "timestamp": "2026-01-20T17:31:43.198Z",
+          "server_timestamp": "2026-01-20T23:01:43.449323"
+        },
+        {
+          "id": 1768930308200,
+          "type": "fullscreen_denied",
+          "severity": "high",
+          "message": "Fullscreen mode was denied",
+          "timestamp": "2026-01-20T17:31:48.200Z",
+          "server_timestamp": "2026-01-20T23:01:48.511568"
+        },
+        {
+          "id": 1768930328281,
+          "type": "focus_lost",
+          "severity": "medium",
+          "message": "Browser window lost focus",
+          "timestamp": "2026-01-20T17:32:08.281Z",
+          "server_timestamp": "2026-01-20T23:02:08.567007"
+        },
+        {
+          "id": 1768930329178,
+          "type": "tab_switch",
+          "severity": "high",
+          "message": "Switched to another tab",
+          "timestamp": "2026-01-20T17:32:09.178Z",
+          "server_timestamp": "2026-01-20T23:02:09.303868"
+        },
+        {
+          "id": 1768930362133,
+          "type": "fullscreen_exit",
+          "severity": "high",
+          "message": "Exited fullscreen mode",
+          "timestamp": "2026-01-20T17:32:42.133Z",
+          "server_timestamp": "2026-01-20T23:02:42.420775"
+        },
+        {
+          "id": 1768930364274,
+          "type": "fullscreen_exit",
+          "severity": "high",
+          "message": "Exited fullscreen mode",
+          "timestamp": "2026-01-20T17:32:44.274Z",
+          "server_timestamp": "2026-01-20T23:02:44.427569"
+        },
+        {
+          "id": 1768930365279,
+          "type": "fullscreen_denied",
+          "severity": "high",
+          "message": "Fullscreen mode was denied",
+          "timestamp": "2026-01-20T17:32:45.279Z",
+          "server_timestamp": "2026-01-20T23:02:45.405769"
+        },
+        {
+          "id": 1768930373023,
+          "type": "keyboard_shortcut",
+          "severity": "low",
+          "message": "Blocked keyboard shortcut: c",
+          "timestamp": "2026-01-20T17:32:53.023Z",
+          "server_timestamp": "2026-01-20T23:02:53.632837"
+        },
+        {
+          "id": 1768930375640,
+          "type": "keyboard_shortcut",
+          "severity": "low",
+          "message": "Blocked keyboard shortcut: c",
+          "timestamp": "2026-01-20T17:32:55.640Z",
+          "server_timestamp": "2026-01-20T23:02:56.105790"
+        },
+        {
+          "id": 1768930375991,
+          "type": "keyboard_shortcut",
+          "severity": "low",
+          "message": "Blocked keyboard shortcut: c",
+          "timestamp": "2026-01-20T17:32:55.991Z",
+          "server_timestamp": "2026-01-20T23:02:56.143816"
+        },
+        {
+          "id": 1768930376191,
+          "type": "keyboard_shortcut",
+          "severity": "low",
+          "message": "Blocked keyboard shortcut: c",
+          "timestamp": "2026-01-20T17:32:56.191Z",
+          "server_timestamp": "2026-01-20T23:02:56.325232"
+        },
+        {
+          "id": 1768930377729,
+          "type": "focus_lost",
+          "severity": "medium",
+          "message": "Browser window lost focus",
+          "timestamp": "2026-01-20T17:32:57.729Z",
+          "server_timestamp": "2026-01-20T23:02:57.879332"
+        },
+        {
+          "id": 1768930377732,
+          "type": "tab_switch",
+          "severity": "high",
+          "message": "Switched to another tab",
+          "timestamp": "2026-01-20T17:32:57.732Z",
+          "server_timestamp": "2026-01-20T23:02:57.921584"
+        },
+        {
+          "id": 1768930383510,
+          "type": "keyboard_shortcut",
+          "severity": "low",
+          "message": "Blocked keyboard shortcut: v",
+          "timestamp": "2026-01-20T17:33:03.510Z",
+          "server_timestamp": "2026-01-20T23:03:03.782991"
+        },
+        {
+          "id": 1768930384029,
+          "type": "keyboard_shortcut",
+          "severity": "low",
+          "message": "Blocked keyboard shortcut: v",
+          "timestamp": "2026-01-20T17:33:04.029Z",
+          "server_timestamp": "2026-01-20T23:03:04.152456"
+        },
+        {
+          "id": 1768930384238,
+          "type": "keyboard_shortcut",
+          "severity": "low",
+          "message": "Blocked keyboard shortcut: v",
+          "timestamp": "2026-01-20T17:33:04.238Z",
+          "server_timestamp": "2026-01-20T23:03:04.359178"
+        },
+        {
+          "id": 1768930384433,
+          "type": "keyboard_shortcut",
+          "severity": "low",
+          "message": "Blocked keyboard shortcut: v",
+          "timestamp": "2026-01-20T17:33:04.433Z",
+          "server_timestamp": "2026-01-20T23:03:04.559151"
+        },
+        {
+          "id": 1768930384621,
+          "type": "keyboard_shortcut",
+          "severity": "low",
+          "message": "Blocked keyboard shortcut: v",
+          "timestamp": "2026-01-20T17:33:04.621Z",
+          "server_timestamp": "2026-01-20T23:03:04.751648"
+        },
+        {
+          "id": 1768930384866,
+          "type": "keyboard_shortcut",
+          "severity": "low",
+          "message": "Blocked keyboard shortcut: v",
+          "timestamp": "2026-01-20T17:33:04.866Z",
+          "server_timestamp": "2026-01-20T23:03:04.990463"
+        },
+        {
+          "id": 1768930385301,
+          "type": "keyboard_shortcut",
+          "severity": "low",
+          "message": "Blocked keyboard shortcut: v",
+          "timestamp": "2026-01-20T17:33:05.301Z",
+          "server_timestamp": "2026-01-20T23:03:05.465402"
+        },
+        {
+          "id": 1768930385102,
+          "type": "keyboard_shortcut",
+          "severity": "low",
+          "message": "Blocked keyboard shortcut: v",
+          "timestamp": "2026-01-20T17:33:05.102Z",
+          "server_timestamp": "2026-01-20T23:03:05.501628"
+        },
+        {
+          "id": 1768930385502,
+          "type": "keyboard_shortcut",
+          "severity": "low",
+          "message": "Blocked keyboard shortcut: v",
+          "timestamp": "2026-01-20T17:33:05.502Z",
+          "server_timestamp": "2026-01-20T23:03:05.659794"
+        },
+        {
+          "id": 1768930385684,
+          "type": "keyboard_shortcut",
+          "severity": "low",
+          "message": "Blocked keyboard shortcut: v",
+          "timestamp": "2026-01-20T17:33:05.684Z",
+          "server_timestamp": "2026-01-20T23:03:05.805156"
+        },
+        {
+          "id": 1768930385899,
+          "type": "keyboard_shortcut",
+          "severity": "low",
+          "message": "Blocked keyboard shortcut: v",
+          "timestamp": "2026-01-20T17:33:05.899Z",
+          "server_timestamp": "2026-01-20T23:03:06.021470"
+        },
+        {
+          "id": 1768930386109,
+          "type": "keyboard_shortcut",
+          "severity": "low",
+          "message": "Blocked keyboard shortcut: v",
+          "timestamp": "2026-01-20T17:33:06.109Z",
+          "server_timestamp": "2026-01-20T23:03:06.234973"
+        },
+        {
+          "id": 1768930386299,
+          "type": "keyboard_shortcut",
+          "severity": "low",
+          "message": "Blocked keyboard shortcut: v",
+          "timestamp": "2026-01-20T17:33:06.299Z",
+          "server_timestamp": "2026-01-20T23:03:06.420475"
+        },
+        {
+          "id": 1768930386493,
+          "type": "keyboard_shortcut",
+          "severity": "low",
+          "message": "Blocked keyboard shortcut: v",
+          "timestamp": "2026-01-20T17:33:06.493Z",
+          "server_timestamp": "2026-01-20T23:03:06.613039"
+        }
+      ],
+      "stats": {},
+      "risk_level": "critical"
+    }
   }
 }

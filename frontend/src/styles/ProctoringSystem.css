@@ -1,0 +1,593 @@
+/* Enterprise Proctoring System Styles */
+/* Professional, Clean Design with Clear Status Indicators */
+
+/* ============== Variables ============== */
+.proctoring-system {
+  --proctor-primary: #1e40af;
+  --proctor-success: #059669;
+  --proctor-warning: #d97706;
+  --proctor-danger: #dc2626;
+  --proctor-critical: #7c2d12;
+  --proctor-bg: #111827;
+  --proctor-card: #1f2937;
+  --proctor-border: #374151;
+  --proctor-text: #f9fafb;
+  --proctor-text-muted: #9ca3af;
+  --proctor-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --proctor-radius: 8px;
+}
+
+/* ============== Camera Preview Container ============== */
+.proctoring-preview {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 220px;
+  background: var(--proctor-card);
+  border-radius: var(--proctor-radius);
+  box-shadow: var(--proctor-shadow);
+  overflow: hidden;
+  z-index: 9999;
+  border: 2px solid var(--proctor-success);
+  transition: all 0.3s ease;
+}
+
+.proctoring-preview.warning {
+  border-color: var(--proctor-danger);
+  animation: pulse-warning 1.5s infinite;
+}
+
+@keyframes pulse-warning {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(220, 38, 38, 0);
+  }
+}
+
+.proctoring-video {
+  width: 100%;
+  height: 165px;
+  object-fit: cover;
+  background: #000;
+  display: block;
+}
+
+/* ============== Status Indicators ============== */
+.proctoring-indicators {
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 4px;
+  background: var(--proctor-bg);
+  border-top: 1px solid var(--proctor-border);
+}
+
+.indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.indicator.active {
+  background: rgba(5, 150, 105, 0.15);
+}
+
+.indicator.inactive {
+  background: rgba(107, 114, 128, 0.15);
+}
+
+.indicator.warning {
+  background: rgba(220, 38, 38, 0.15);
+  animation: blink-warning 1s infinite;
+}
+
+@keyframes blink-warning {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.indicator-icon {
+  font-size: 14px;
+}
+
+.indicator-label {
+  font-size: 9px;
+  color: var(--proctor-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.indicator.active .indicator-label {
+  color: var(--proctor-success);
+}
+
+.indicator.warning .indicator-label {
+  color: var(--proctor-danger);
+}
+
+/* ============== Violation Counter ============== */
+.violation-counter {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--proctor-danger);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+}
+
+.violation-icon {
+  font-size: 12px;
+}
+
+.violation-count {
+  min-width: 16px;
+  text-align: center;
+}
+
+/* ============== Alert Banners ============== */
+.multiple-faces-alert,
+.face-missing-alert {
+  position: absolute;
+  bottom: 50px;
+  left: 0;
+  right: 0;
+  padding: 8px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  animation: slide-up 0.3s ease;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.multiple-faces-alert {
+  background: var(--proctor-critical);
+}
+
+.face-missing-alert {
+  background: var(--proctor-danger);
+}
+
+/* ============== Warning Modal ============== */
+.proctoring-warning-modal {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  animation: modal-appear 0.3s ease;
+}
+
+@keyframes modal-appear {
+  from {
+    transform: translateX(-50%) translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+.warning-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  border-radius: var(--proctor-radius);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  border: 1px solid;
+}
+
+.warning-content.severity-low {
+  background: rgba(217, 119, 6, 0.95);
+  border-color: #f59e0b;
+}
+
+.warning-content.severity-medium {
+  background: rgba(234, 88, 12, 0.95);
+  border-color: #fb923c;
+}
+
+.warning-content.severity-high {
+  background: rgba(220, 38, 38, 0.95);
+  border-color: #f87171;
+}
+
+.warning-content.severity-critical {
+  background: rgba(127, 29, 29, 0.98);
+  border-color: #ef4444;
+  animation: critical-pulse 0.5s infinite;
+}
+
+@keyframes critical-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+.warning-icon {
+  font-size: 28px;
+}
+
+.warning-text {
+  color: white;
+}
+
+.warning-text strong {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.warning-text p {
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+/* ============== Camera Error ============== */
+.camera-error {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 280px;
+  padding: 20px;
+  background: var(--proctor-card);
+  border-radius: var(--proctor-radius);
+  box-shadow: var(--proctor-shadow);
+  border: 2px solid var(--proctor-danger);
+  text-align: center;
+  z-index: 9999;
+  color: var(--proctor-text);
+}
+
+.camera-error .error-icon {
+  font-size: 32px;
+  display: block;
+  margin-bottom: 12px;
+  opacity: 0.7;
+}
+
+.camera-error p {
+  margin: 0 0 16px 0;
+  font-size: 13px;
+  color: var(--proctor-text-muted);
+}
+
+.retry-btn {
+  padding: 10px 20px;
+  background: var(--proctor-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.retry-btn:hover {
+  background: #2563eb;
+}
+
+/* ============== Initialization Overlay ============== */
+.proctoring-init-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+  backdrop-filter: blur(4px);
+}
+
+.init-content {
+  max-width: 480px;
+  padding: 40px;
+  background: var(--proctor-card);
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  border: 1px solid var(--proctor-border);
+}
+
+.init-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.init-content h3 {
+  margin: 0 0 12px 0;
+  font-size: 24px;
+  color: var(--proctor-text);
+  font-weight: 600;
+}
+
+.init-content > p {
+  margin: 0 0 24px 0;
+  color: var(--proctor-text-muted);
+  font-size: 15px;
+}
+
+.permission-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.permission-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: rgba(30, 64, 175, 0.15);
+  border-radius: 8px;
+  color: var(--proctor-text);
+  font-size: 14px;
+  border: 1px solid rgba(30, 64, 175, 0.3);
+}
+
+.init-notice {
+  text-align: left;
+  padding: 16px;
+  background: rgba(217, 119, 6, 0.1);
+  border: 1px solid rgba(217, 119, 6, 0.3);
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.init-notice strong {
+  color: var(--proctor-warning);
+  font-size: 13px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.init-notice ul {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--proctor-text-muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.init-btn {
+  padding: 14px 32px;
+  background: linear-gradient(135deg, var(--proctor-primary), #3b82f6);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 16px rgba(30, 64, 175, 0.4);
+}
+
+.init-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(30, 64, 175, 0.5);
+}
+
+.init-btn:active {
+  transform: translateY(0);
+}
+
+/* ============== Debug Panel ============== */
+.proctoring-debug {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  max-width: 300px;
+  background: var(--proctor-card);
+  border-radius: var(--proctor-radius);
+  border: 1px solid var(--proctor-border);
+  font-size: 11px;
+  z-index: 9998;
+  color: var(--proctor-text);
+}
+
+.proctoring-debug summary {
+  padding: 8px 12px;
+  cursor: pointer;
+  color: var(--proctor-text-muted);
+  user-select: none;
+}
+
+.proctoring-debug summary:hover {
+  color: var(--proctor-text);
+}
+
+.proctoring-debug pre {
+  margin: 0;
+  padding: 12px;
+  background: var(--proctor-bg);
+  overflow-x: auto;
+  font-family: "Monaco", "Menlo", monospace;
+  font-size: 10px;
+  line-height: 1.5;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* ============== Minimized View Toggle ============== */
+.proctoring-preview .minimize-toggle {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 24px;
+  height: 24px;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.proctoring-preview:hover .minimize-toggle {
+  opacity: 1;
+}
+
+/* ============== Recording Indicator ============== */
+.recording-indicator {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: rgba(220, 38, 38, 0.9);
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.recording-dot {
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+  animation: recording-blink 1s infinite;
+}
+
+@keyframes recording-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* ============== Responsive Adjustments ============== */
+@media (max-width: 768px) {
+  .proctoring-preview {
+    width: 160px;
+    bottom: 10px;
+    right: 10px;
+  }
+
+  .proctoring-video {
+    height: 120px;
+  }
+
+  .proctoring-indicators {
+    padding: 6px 2px;
+  }
+
+  .indicator-label {
+    display: none;
+  }
+
+  .indicator-icon {
+    font-size: 16px;
+  }
+
+  .proctoring-warning-modal {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    transform: none;
+  }
+
+  .warning-content {
+    padding: 12px 16px;
+  }
+
+  .init-content {
+    margin: 20px;
+    padding: 24px;
+  }
+
+  .init-content h3 {
+    font-size: 20px;
+  }
+}
+
+/* ============== High Contrast Mode ============== */
+@media (prefers-contrast: high) {
+  .proctoring-preview {
+    border-width: 3px;
+  }
+
+  .indicator {
+    border: 1px solid currentColor;
+  }
+
+  .warning-content {
+    border-width: 2px;
+  }
+}
+
+/* ============== Reduced Motion ============== */
+@media (prefers-reduced-motion: reduce) {
+  .proctoring-preview.warning,
+  .indicator.warning,
+  .warning-content.severity-critical,
+  .recording-dot {
+    animation: none;
+  }
+
+  .init-btn:hover {
+    transform: none;
+  }
+}
+
+/* ============== Print Styles ============== */
+@media print {
+  .proctoring-system,
+  .proctoring-preview,
+  .proctoring-warning-modal,
+  .proctoring-init-overlay {
+    display: none !important;
+  }
+}

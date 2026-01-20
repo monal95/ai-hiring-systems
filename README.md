@@ -18,6 +18,41 @@ An AI-powered recruitment and hiring management platform built with React and Fl
 - **Speech Testing** - Voice-based interview capabilities
 - **AI Evaluation** - Automated response analysis and scoring
 
+### 🔒 Enterprise Proctoring System (NEW)
+
+Our enterprise-grade proctoring ensures interview integrity with multi-level monitoring:
+
+#### Level 1: Basic Proctoring
+
+- **Full-screen Enforcement** - Candidates must remain in fullscreen mode
+- **Tab-switch Detection** - Alerts when candidates switch browser tabs
+- **Copy-paste Blocking** - Prevents copying/pasting during interviews
+- **Time Tracking** - Active vs inactive time monitoring
+- **Browser Focus Monitoring** - Detects when browser loses focus
+
+#### Level 2: Advanced Proctoring
+
+- **Webcam Monitoring** - Real-time video feed monitoring
+- **Face Presence Detection** - Alerts when candidate's face is not visible
+- **Multiple Face Detection** - Flags when additional people are detected
+- **Microphone Activity** - Audio level monitoring
+- **Behavioral Flags** - Comprehensive violation tracking with risk scoring
+
+| Signal                | Interpretation         |
+| --------------------- | ---------------------- |
+| Face missing          | Candidate left seat    |
+| Multiple faces        | Possible external help |
+| Frequent tab switches | Reference materials    |
+| Prolonged silence     | Suspicious pause       |
+
+#### Level 3: Enterprise Proctoring (Future Roadmap)
+
+- Screen recording
+- Eye-tracking analysis
+- ID verification
+- Browser lockdown
+- Second device detection
+
 ### Communication & Integration
 
 - **Email Automation** - SendGrid-powered email workflows (confirmations, rejections, offers)
@@ -198,6 +233,14 @@ Frontend will open at `http://localhost:3000`
 | POST   | `/api/interview/start`    | Start interview session      |
 | POST   | `/api/interview/evaluate` | Evaluate interview responses |
 | POST   | `/api/email/send`         | Send email notification      |
+
+### Proctoring Endpoints
+
+| Method | Endpoint                                      | Description                   |
+| ------ | --------------------------------------------- | ----------------------------- |
+| POST   | `/api/interview/<token>/proctoring-violation` | Record a proctoring violation |
+| GET    | `/api/interview/<token>/proctoring-report`    | Get proctoring report         |
+| POST   | `/api/interview/<token>/proctoring-stats`     | Update proctoring statistics  |
 
 ## 🤝 Contributing
 

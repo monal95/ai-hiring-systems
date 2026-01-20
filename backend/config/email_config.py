@@ -8,7 +8,7 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail, Email, To, Content, HtmlContent
 
 # SendGrid Configuration
-SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY', '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')
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY', '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')
 FROM_EMAIL = os.environ.get('FROM_EMAIL', 'noreply@gcc-hiring.com')  # Default sender email
 FROM_NAME = os.environ.get('FROM_NAME', 'GCC Hiring System')
 

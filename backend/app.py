@@ -3179,6 +3179,146 @@ def complete_interview(interview_token):
     }), 200
 
 
+# ============== Proctoring Endpoints ==============
+
+@app.route('/api/interview/<interview_token>/proctoring-violation', methods=['POST'])
+def record_proctoring_violation(interview_token):
+    """Record a proctoring violation during interview session"""
+    try:
+        data = request.json
+        violation = data.get('violation', {})
+        
+        if not violation:
+            return jsonify({'error': 'Violation data is required'}), 400
+        
+        # Get session
+        session = interview_session_manager.get_interview_session(interview_token)
+        if not session:
+            return jsonify({'error': 'Interview session not found'}), 404
+        
+        # Initialize proctoring data if not exists
+        if 'proctoring' not in session:
+            session['proctoring'] = {
+                'violations': [],
+                'stats': {},
+                'risk_level': 'none'
+            }
+        
+        # Add violation with server timestamp
+        violation['server_timestamp'] = datetime.now().isoformat()
+        session['proctoring']['violations'].append(violation)
+        
+        # Update risk level based on violations
+        violation_count = len(session['proctoring']['violations'])
+        critical_count = sum(1 for v in session['proctoring']['violations'] if v.get('severity') == 'critical')
+        high_count = sum(1 for v in session['proctoring']['violations'] if v.get('severity') == 'high')
+        
+        if critical_count >= 2 or violation_count >= 10:
+            session['proctoring']['risk_level'] = 'critical'
+        elif critical_count >= 1 or high_count >= 3 or violation_count >= 5:
+            session['proctoring']['risk_level'] = 'high'
+        elif high_count >= 1 or violation_count >= 3:
+            session['proctoring']['risk_level'] = 'medium'
+        elif violation_count > 0:
+            session['proctoring']['risk_level'] = 'low'
+        
+        # Save updated session
+        interview_session_manager.update_session(interview_token, session)
+        
+        print(f"[Proctoring] Violation recorded for {interview_token}: {violation.get('type')} ({violation.get('severity')})")
+        
+        return jsonify({
+            'success': True,
+            'violation_count': violation_count,
+            'risk_level': session['proctoring']['risk_level']
+        }), 200
+        
+    except Exception as e:
+        print(f"[Proctoring] Error recording violation: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/interview/<interview_token>/proctoring-report', methods=['GET'])
+def get_proctoring_report(interview_token):
+    """Get proctoring report for an interview session"""
+    try:
+        session = interview_session_manager.get_interview_session(interview_token)
+        if not session:
+            return jsonify({'error': 'Interview session not found'}), 404
+        
+        proctoring_data = session.get('proctoring', {
+            'violations': [],
+            'stats': {},
+            'risk_level': 'none'
+        })
+        
+        # Calculate summary statistics
+        violations = proctoring_data.get('violations', [])
+        violation_types = {}
+        severity_counts = {'low': 0, 'medium': 0, 'high': 0, 'critical': 0}
+        
+        for v in violations:
+            v_type = v.get('type', 'unknown')
+            violation_types[v_type] = violation_types.get(v_type, 0) + 1
+            severity = v.get('severity', 'low')
+            if severity in severity_counts:
+                severity_counts[severity] += 1
+        
+        return jsonify({
+            'success': True,
+            'interview_token': interview_token,
+            'proctoring_report': {
+                'total_violations': len(violations),
+                'violation_types': violation_types,
+                'severity_breakdown': severity_counts,
+                'risk_level': proctoring_data.get('risk_level', 'none'),
+                'violations': violations,
+                'stats': proctoring_data.get('stats', {})
+            }
+        }), 200
+        
+    except Exception as e:
+        print(f"[Proctoring] Error getting report: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/interview/<interview_token>/proctoring-stats', methods=['POST'])
+def update_proctoring_stats(interview_token):
+    """Update proctoring statistics for an interview session"""
+    try:
+        data = request.json
+        stats = data.get('stats', {})
+        
+        session = interview_session_manager.get_interview_session(interview_token)
+        if not session:
+            return jsonify({'error': 'Interview session not found'}), 404
+        
+        if 'proctoring' not in session:
+            session['proctoring'] = {
+                'violations': [],
+                'stats': {},
+                'risk_level': 'none'
+            }
+        
+        # Update stats
+        session['proctoring']['stats'] = {
+            **session['proctoring'].get('stats', {}),
+            **stats,
+            'last_updated': datetime.now().isoformat()
+        }
+        
+        interview_session_manager.update_session(interview_token, session)
+        
+        return jsonify({
+            'success': True,
+            'message': 'Proctoring stats updated'
+        }), 200
+        
+    except Exception as e:
+        print(f"[Proctoring] Error updating stats: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route('/api/interview/<interview_token>/evaluate-answer', methods=['POST'])
 def evaluate_answer_realtime(interview_token):
     """Evaluate a single answer in real-time using AI"""

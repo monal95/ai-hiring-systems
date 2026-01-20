@@ -1,26 +1,109 @@
 # GCC Hiring System - Backend
 
-A Flask-based backend powering an AI-driven recruitment platform with Groq LLM integration, SendGrid email automation, and LinkedIn OAuth.
+A Flask-based backend powering an AI-driven recruitment platform with Groq LLM integration, SendGrid email automation, LinkedIn OAuth, and intelligent resume parsing.
+
+## 🌟 Features
+
+### AI & Machine Learning
+
+- **Resume Parsing** - Extract skills, experience, and qualifications from PDF resumes
+- **Skill Matching** - AI-based candidate-to-job matching with scoring
+- **ML Predictions** - Candidate success prediction using scikit-learn
+- **AI Recommendations** - Salary suggestions, interview panel selection, assessment planning
+
+### Interview System
+
+- **Adaptive Interviews** - Dynamic question generation based on responses
+- **Coding Evaluation** - Integrated code assessment with Judge0
+- **Enhanced Interview** - Multi-stage interview management
+- **AI Evaluation** - Automated response scoring and feedback
+
+### 🔒 Enterprise Proctoring System
+
+Backend support for real-time interview integrity monitoring:
+
+- **Violation Recording** - Store and track all proctoring violations
+- **Risk Level Calculation** - Automatic risk assessment based on violation patterns
+- **Proctoring Reports** - Comprehensive violation summaries for HR review
+- **Session Statistics** - Time tracking, focus analytics, and behavioral data
+- **Integration with Interview Completion** - Proctoring data included in final evaluation
+
+### Integrations
+
+- **Groq LLM (LLaMA 3.3)** - AI-generated content (job descriptions, emails, posts)
+- **SendGrid** - Email automation (confirmations, rejections, offers, invitations)
+- **LinkedIn OAuth 2.0** - Social authentication and profile sharing
+- **Magical AI** - Advanced skill extraction
 
 ## 🏗️ Architecture
 
 ```
-┌─────────────────┐
-│   Frontend      │
-│   (React)       │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐     ┌─────────────────┐
-│   Flask API     │────▶│   Groq API      │
-│   (Backend)     │     │  (LLaMA 3.3)    │
-└────────┬────────┘     └─────────────────┘
-         │
-         ▼
-┌─────────────────┐     ┌─────────────────┐
-│   SendGrid      │     │   LinkedIn      │
-│   (Emails)      │     │   OAuth 2.0     │
-└─────────────────┘     └─────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                        Flask Application                         │
+├─────────────────────────────────────────────────────────────────┤
+│                           Routes                                 │
+│  ┌─────────────┐  ┌─────────────────┐  ┌─────────────────────┐  │
+│  │  Main API   │  │  LinkedIn Auth  │  │   LinkedIn Share    │  │
+│  │  (app.py)   │  │  (OAuth 2.0)    │  │   (Post Creation)   │  │
+│  └─────────────┘  └─────────────────┘  └─────────────────────┘  │
+├─────────────────────────────────────────────────────────────────┤
+│                           Models                                 │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────────┐  │
+│  │Resume Parser│  │Skill Matcher│  │   Interview System      │  │
+│  └─────────────┘  └─────────────┘  └─────────────────────────┘  │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────────┐  │
+│  │ML Predictor │  │AI Recommends│  │   Adaptive Interview    │  │
+│  └─────────────┘  └─────────────┘  └─────────────────────────┘  │
+├─────────────────────────────────────────────────────────────────┤
+│                         Config                                   │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌────────┐  │
+│  │Groq Config  │  │Email Config │  │LinkedIn Cfg │  │Judge0  │  │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └────────┘  │
+└────────┬────────────────┬──────────────────┬────────────────────┘
+         │                │                  │
+         ▼                ▼                  ▼
+┌─────────────┐   ┌─────────────┐   ┌─────────────────┐
+│  Groq API   │   │  SendGrid   │   │    LinkedIn     │
+│ (LLaMA 3.3) │   │  (Emails)   │   │   OAuth 2.0     │
+└─────────────┘   └─────────────┘   └─────────────────┘
+```
+
+## 📁 Directory Structure
+
+```
+backend/
+├── app.py                    # Main Flask application (3500+ lines)
+├── requirements.txt          # Python dependencies
+├── diagnose_persistence.py   # Data persistence diagnostics
+│
+├── config/                   # Configuration modules
+│   ├── ai_evaluator.py       # AI-based response evaluation
+│   ├── api_integrations.py   # External API integrations
+│   ├── devtunnel_config.py   # Dev tunnel (ngrok) configuration
+│   ├── email_config.py       # SendGrid email setup
+│   ├── groq_config.py        # Groq LLM configuration
+│   ├── judge0_config.py      # Code execution API
+│   ├── linkedin_config.py    # LinkedIn OAuth settings
+│   └── magical_config.py     # Magical AI skill extraction
+│
+├── models/                   # AI/ML models
+│   ├── adaptive_interview.py # Dynamic interview management
+│   ├── ai_recommendations.py # Salary, panel, assessment recommendations
+│   ├── enhanced_interview.py # Multi-stage interview system
+│   ├── interview_system.py   # Core interview logic
+│   ├── ml_predictor.py       # ML-based predictions
+│   ├── resume_parser.py      # Resume parsing with NLP
+│   └── skill_matcher.py      # Candidate-job skill matching
+│
+├── routes/                   # API route blueprints
+│   ├── linkedin_auth.py      # LinkedIn OAuth endpoints
+│   └── linkedin_share.py     # LinkedIn sharing endpoints
+│
+└── data/                     # Data storage
+    ├── candidates.json       # Candidate data
+    ├── interview_sessions.json
+    ├── jobs.json             # Job postings
+    └── resumes/              # Uploaded resume files
 ```
 
 ## 🚀 Quick Start
@@ -35,7 +118,7 @@ A Flask-based backend powering an AI-driven recruitment platform with Groq LLM i
 ```bash
 cd backend
 
-# Create virtual environment (optional but recommended)
+# Create virtual environment (recommended)
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
@@ -197,6 +280,77 @@ Content-Type: application/json
 | GET    | `/api/auth/linkedin/status`   | Check connection status   |
 | POST   | `/api/linkedin/share/job`     | Share job to LinkedIn     |
 | POST   | `/api/linkedin/auto-post`     | Auto-post job on creation |
+
+### 🔒 Proctoring Endpoints
+
+| Method | Endpoint                                      | Description                          |
+| ------ | --------------------------------------------- | ------------------------------------ |
+| POST   | `/api/interview/<token>/proctoring-violation` | Record a proctoring violation        |
+| GET    | `/api/interview/<token>/proctoring-report`    | Get proctoring report for interview  |
+| POST   | `/api/interview/<token>/proctoring-stats`     | Update proctoring session statistics |
+
+#### Record Proctoring Violation
+
+```bash
+POST /api/interview/<token>/proctoring-violation
+Content-Type: application/json
+
+{
+  "violation": {
+    "type": "tab_switch",
+    "severity": "high",
+    "message": "Switched to another tab",
+    "timestamp": "2026-01-20T10:30:00Z"
+  }
+}
+```
+
+**Violation Types:**
+
+- `tab_switch` - Tab switch detected
+- `focus_lost` - Browser lost focus
+- `face_not_detected` - Face not visible
+- `multiple_faces` - Multiple faces detected
+- `copy_attempt` - Copy action blocked
+- `paste_attempt` - Paste action blocked
+- `fullscreen_exit` - Exited fullscreen mode
+- `keyboard_shortcut` - Blocked keyboard shortcut
+
+**Severity Levels:**
+
+- `low` - Minor infractions
+- `medium` - Moderate violations
+- `high` - Serious violations
+- `critical` - Critical integrity concerns
+
+#### Get Proctoring Report
+
+```bash
+GET /api/interview/<token>/proctoring-report
+```
+
+Response:
+
+```json
+{
+  "success": true,
+  "proctoring_report": {
+    "total_violations": 5,
+    "violation_types": {
+      "tab_switch": 2,
+      "focus_lost": 3
+    },
+    "severity_breakdown": {
+      "low": 1,
+      "medium": 2,
+      "high": 2,
+      "critical": 0
+    },
+    "risk_level": "medium",
+    "violations": [...]
+  }
+}
+```
 
 ## 🔐 LinkedIn OAuth Setup
 

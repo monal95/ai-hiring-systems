@@ -3,6 +3,7 @@ import axios from 'axios';
 import API_BASE_URL from '../config/api';
 import CodingChallenge from './CodingChallenge';
 import SpeechTest from './SpeechTest';
+import ProctoringSystem, { useProctoringReport, getProctoringViolations } from './ProctoringSystem';
 import '../styles/InterviewSession.css';
 
 const InterviewSession = ({ token }) => {
@@ -27,6 +28,11 @@ const InterviewSession = ({ token }) => {
   const phaseTimerRef = useRef(null);
 
   const [score, setScore] = useState(null);
+
+  // Proctoring state
+  const [proctoringEnabled, setProctoringEnabled] = useState(false);
+  const [proctoringInitialized, setProctoringInitialized] = useState(false);
+  const [proctoringViolations, setProctoringViolations] = useState([]);
 
   const phases = [
     { id: 'welcome', label: 'Welcome', duration: 0 },
@@ -230,12 +236,35 @@ const InterviewSession = ({ token }) => {
 
   const completeInterview = async () => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/interview/${token}/complete`);
+      // Get proctoring report before completing
+      const proctoringReport = window.proctoringSystem?.getProctoringReport?.() || null;
+      
+      const response = await axios.post(`${API_BASE_URL}/api/interview/${token}/complete`, {
+        proctoring_report: proctoringReport
+      });
       setStatus('completed');
       setScore(response.data.interview_score);
       setCurrentPhase('completion');
+      setProctoringEnabled(false); // Disable proctoring after completion
     } catch (error) {
       console.error('Error completing interview:', error);
+    }
+  };
+
+  // Proctoring violation handler
+  const handleProctoringViolation = (violation) => {
+    setProctoringViolations(prev => [...prev, violation]);
+    
+    // Log violation to server
+    axios.post(`${API_BASE_URL}/api/interview/${token}/proctoring-violation`, {
+      violation
+    }).catch(err => console.error('Error logging proctoring violation:', err));
+  };
+
+  // Proctoring status change handler
+  const handleProctoringStatusChange = (status) => {
+    if (status.initialized) {
+      setProctoringInitialized(true);
     }
   };
 
@@ -287,7 +316,7 @@ const InterviewSession = ({ token }) => {
               <p><span>Position</span><strong>{interviewData.job_title}</strong></p>
               <p><span>Duration</span><strong>Approx. 130 minutes</strong></p>
             </div>
-            <div style={{textAlign: 'left', marginBottom: '32px', padding: '20px', background: '#f9fafb', borderRadius: '6px', border: '1px solid #e5e7eb'}}>
+            <div style={{textAlign: 'left', marginBottom: '24px', padding: '20px', background: '#f9fafb', borderRadius: '6px', border: '1px solid #e5e7eb'}}>
               <p style={{marginBottom: '16px', fontWeight: '600', color: '#111827', fontSize: '15px'}}>Interview Structure:</p>
               <div style={{color: '#4b5563', fontSize: '14px', lineHeight: '1.8'}}>
                 <div style={{marginBottom: '8px'}}>1. Technical Questions - 15 questions, 30 minutes</div>
@@ -295,6 +324,26 @@ const InterviewSession = ({ token }) => {
                 <div>3. Speech Test - 20 questions, 40 minutes (verbal answers)</div>
               </div>
             </div>
+            
+            {/* Proctoring Notice */}
+            <div style={{textAlign: 'left', marginBottom: '32px', padding: '20px', background: '#fef3c7', borderRadius: '6px', border: '1px solid #f59e0b'}}>
+              <p style={{marginBottom: '12px', fontWeight: '600', color: '#92400e', fontSize: '15px', display: 'flex', alignItems: 'center', gap: '8px'}}>
+                <span>🔒</span> Proctored Interview Session
+              </p>
+              <div style={{color: '#a16207', fontSize: '13px', lineHeight: '1.7'}}>
+                <p style={{marginBottom: '8px'}}>This interview is monitored for integrity. You will need to:</p>
+                <ul style={{margin: '0', paddingLeft: '20px'}}>
+                  <li>Enable your camera and microphone</li>
+                  <li>Stay in fullscreen mode throughout</li>
+                  <li>Keep your face visible at all times</li>
+                  <li>Avoid switching tabs or windows</li>
+                </ul>
+                <p style={{marginTop: '12px', fontStyle: 'italic', fontSize: '12px'}}>
+                  Violations will be recorded and reviewed by the hiring team.
+                </p>
+              </div>
+            </div>
+
             <button onClick={startInterview} disabled={loading} className="start-btn">
               {loading ? 'Starting...' : 'Begin Interview'}
             </button>
@@ -304,10 +353,19 @@ const InterviewSession = ({ token }) => {
     );
   }
 
-  // Instructions screen
+  // Instructions screen - now with proctoring initialization
   if (currentPhase === 'instruction') {
     return (
       <div className="interview-session">
+        {/* Proctoring System - Initialize here */}
+        <ProctoringSystem
+          isActive={true}
+          onViolation={handleProctoringViolation}
+          onStatusChange={handleProctoringStatusChange}
+          candidateName={interviewData?.candidate_name}
+          showPreview={true}
+        />
+        
         <div className="instruction-screen">
           <div className="instruction-content">
             <h2>Interview Instructions</h2>
@@ -382,6 +440,18 @@ const InterviewSession = ({ token }) => {
                 </div>
               </div>
             )}
+            
+            {/* Proctoring Summary */}
+            {proctoringViolations.length > 0 && (
+              <div style={{marginTop: '24px', padding: '16px', background: '#fef3c7', borderRadius: '8px', border: '1px solid #f59e0b'}}>
+                <p style={{margin: '0 0 8px 0', fontWeight: '600', color: '#92400e', fontSize: '14px'}}>
+                  ⚠️ Proctoring Report: {proctoringViolations.length} violation(s) recorded
+                </p>
+                <p style={{margin: 0, color: '#a16207', fontSize: '12px'}}>
+                  These will be reviewed by the hiring team.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -397,6 +467,15 @@ const InterviewSession = ({ token }) => {
 
     return (
       <div className="interview-session">
+        {/* Proctoring System */}
+        <ProctoringSystem
+          isActive={true}
+          onViolation={handleProctoringViolation}
+          onStatusChange={handleProctoringStatusChange}
+          candidateName={interviewData?.candidate_name}
+          showPreview={true}
+        />
+
         {/* Top Timer Bar */}
         <div className="top-timer-bar">
           <div className="timer-left">
@@ -567,6 +646,15 @@ const InterviewSession = ({ token }) => {
 
     return (
       <div className="interview-session">
+        {/* Proctoring System */}
+        <ProctoringSystem
+          isActive={true}
+          onViolation={handleProctoringViolation}
+          onStatusChange={handleProctoringStatusChange}
+          candidateName={interviewData?.candidate_name}
+          showPreview={true}
+        />
+
         {/* Top Timer Bar */}
         <div className="top-timer-bar">
           <div className="timer-left">
@@ -622,13 +710,24 @@ const InterviewSession = ({ token }) => {
     };
 
     return (
-      <SpeechTest
-        token={token}
-        questions={speechQuestions}
-        onComplete={handleSpeechComplete}
-        timeRemaining={phaseTimeRemaining}
-        formatTime={formatTime}
-      />
+      <div className="interview-session" style={{position: 'relative'}}>
+        {/* Proctoring System */}
+        <ProctoringSystem
+          isActive={true}
+          onViolation={handleProctoringViolation}
+          onStatusChange={handleProctoringStatusChange}
+          candidateName={interviewData?.candidate_name}
+          showPreview={true}
+        />
+        
+        <SpeechTest
+          token={token}
+          questions={speechQuestions}
+          onComplete={handleSpeechComplete}
+          timeRemaining={phaseTimeRemaining}
+          formatTime={formatTime}
+        />
+      </div>
     );
   }
 
